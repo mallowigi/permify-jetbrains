@@ -1,0 +1,18 @@
+<idea-plugin>
+  <id>com.mallowigi.permify</id>
+
+  <name>Permify</name>
+
+  <vendor email="elior@material-theme.com" url="https://www.material-theme.com">Atom Material</vendor>
+
+  <description><![CDATA[
+    Permify TextMate Plugin for JetBrains IDEs
+    ]]></description>
+
+  <depends>com.intellij.modules.platform</depends>
+  <depends>org.jetbrains.plugins.textmate</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <textmate.bundleProvider implementation="com.mallowigi.permify.PermifyTextMateBundleProvider"/>
+  </extensions>
+</idea-plugin>
