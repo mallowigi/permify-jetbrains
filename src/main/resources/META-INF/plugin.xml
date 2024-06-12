@@ -1,12 +1,21 @@
 <idea-plugin>
     <id>com.mallowigi.permify</id>
-
     <name>Permify</name>
-
     <vendor email="elior@material-theme.com" url="https://www.material-theme.com">Atom Material</vendor>
 
     <description><![CDATA[
-        Permify TextMate Plugin for JetBrains IDEs
+        <h1>Permify Language Support</h1>
+        <p>
+            This plugin provides support for the <a href="https://permify.co">Permify authorization language</a> to JetBrains IDEs.
+        </p>
+        <h2>Features</h2>
+        <ul>
+            <li>Syntax Highlighting</li>
+            <li>Basic Code Completion</li>
+            <li>Automatic indentation</li>
+            <li>Commenting</li>
+            <li>Bracket Matching</li>
+        </ul>
         ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
