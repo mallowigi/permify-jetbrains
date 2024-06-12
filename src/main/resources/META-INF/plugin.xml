@@ -28,5 +28,9 @@
                              implementation="com.mallowigi.permify.PermifyTemplateContextType"
                              order="first"/>
         <defaultLiveTemplates file="templates/permify.xml"/>
+
+        <fileIndentOptionsProvider
+                implementation="com.mallowigi.PermifyFileIndentOptionsProvider"
+                id="PermifyFileIndentOptionsProvider"/>
     </extensions>
 </idea-plugin>
