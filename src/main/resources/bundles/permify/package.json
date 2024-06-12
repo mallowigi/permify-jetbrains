@@ -24,6 +24,12 @@
         "scopeName": "source.perm",
         "path": "./syntaxes/permify.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "permify",
+        "path": "./snippets/permify.code-snippets"
+      }
     ]
   }
 }
