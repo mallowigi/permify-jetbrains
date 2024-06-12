@@ -30,7 +30,6 @@ the [TextMate Bundles](https://plugins.jetbrains.com/plugin/7221-textmate-bundle
 
 ## TODO
 
-- [ ] Add Code Snippets
 - [ ] File Templates
 - [ ] Convert to a first-party language
 - [ ] LSP Support

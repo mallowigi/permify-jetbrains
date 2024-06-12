@@ -1,0 +1,40 @@
+<templateSet group="Permify">
+    <template name="entity" value="entity $ENTITY$ {&#10;&#9;$END$&#10;}" description="entity" toReformat="false">
+        <variable name="ENTITY" expression="myEntity" alwaysStopAt="true"/>
+        <context>
+            <option name="Permify" value="true"/>
+        </context>
+    </template>
+
+    <template name="relation" value="relation $RELATION$ @$ENTITY$ &#10;$END$" description="relation" toReformat="false">
+        <variable name="RELATION" expression="myRelation" alwaysStopAt="true"/>
+        <variable name="ENTITY" expression="myEntity" alwaysStopAt="true"/>
+        <context>
+            <option name="Permify" value="true"/>
+        </context>
+    </template>
+
+    <template name="action" value="action $ACTION$ = $END$&#10;" description="action" toReformat="false">
+        <variable name="ACTION" expression="myAction" alwaysStopAt="true"/>
+        <context>
+            <option name="Permify" value="true"/>
+        </context>
+    </template>
+
+    <template name="attribute" value="attribute $ATTR$ $TYPE$ $END$&#10;" description="attribute" toReformat="false">
+        <variable name="ATTR" expression="myAttribute" alwaysStopAt="true"/>
+        <variable name="TYPE" expression="string" alwaysStopAt="true"/>
+        <context>
+            <option name="Permify" value="true"/>
+        </context>
+    </template>
+
+    <template name="rule" value="rule $RULE$($PARAM$ $TYPE) {&#10;&#9;$END$&#10;}" description="rule" toReformat="false">
+        <variable name="RULE" expression="myRule" alwaysStopAt="true"/>
+        <variable name="PARAM" expression="myParam" alwaysStopAt="true"/>
+        <variable name="TYPE" expression="string" alwaysStopAt="true"/>
+        <context>
+            <option name="Permify" value="true"/>
+        </context>
+    </template>
+</templateSet>
