@@ -32,5 +32,7 @@
         <fileIndentOptionsProvider
                 implementation="com.mallowigi.PermifyFileIndentOptionsProvider"
                 id="PermifyFileIndentOptionsProvider"/>
+
+        <fileIconProvider implementation="com.mallowigi.permify.PermifyFileIconProvider"/>
     </extensions>
 </idea-plugin>
