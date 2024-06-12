@@ -1,0 +1,277 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Perm Authorization Language",
+  "fileTypes": [
+    "perm",
+    "permify"
+  ],
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#entities"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#relations"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "begin": "//",
+          "end": "\\n",
+          "name": "comment.line.perm"
+        }
+      ]
+    },
+    "entities": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.class.perm"
+            },
+            "2": {
+              "name": "entity.name.type.class.perm"
+            }
+          },
+          "comment": "Entity name",
+          "match": "^\\s*(entity)\\s+([.a-zA-Z0-9_:]+)",
+          "name": "meta.class.perm"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.relation.perm"
+            },
+            "2": {
+              "name": "variable.language.perm"
+            }
+          },
+          "comment": "Relation/Permission name",
+          "match": "^\\s*(relation|permission)\\s+([.a-zA-Z0-9_:]+)",
+          "name": "meta.class.perm"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.other.action.perm"
+            },
+            "2": {
+              "name": "variable.language.perm"
+            }
+          },
+          "comment": "Action/Attribute name",
+          "match": "^\\s*(action|attribute)\\s+([a-zA-Z0-9_]+)",
+          "name": "support.function.action.perm"
+        },
+        {
+          "begin": "\\b(rule)\\s*([a-zA-Z0-9_]+)\\s*(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.function.perm"
+            },
+            "2": {
+              "name": "entity.name.function.perm"
+            },
+            "3": {
+              "name": "punctuation.definition.parameters.begin.perm"
+            }
+          },
+          "comment": "Rules",
+          "end": "(\\{)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.parameters.end.perm"
+            }
+          },
+          "name": "support.function.action.perm",
+          "patterns": [
+            {
+              "include": "#function-params"
+            }
+          ]
+        }
+      ]
+    },
+    "function-params": {
+      "patterns": [
+        {
+          "begin": "(?=\\w)",
+          "end": "([,)])",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.parameters.end.perm"
+            }
+          },
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.function.perm"
+                },
+                "2": {
+                  "name": "support.type.perm"
+                }
+              },
+              "match": "([a-zA-Z0-9_]+)\\s([a-zA-Z0-9_]+)"
+            }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(return|and|or|not|in)\\b",
+          "name": "keyword.control.perm"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b[0-9]+\\b",
+          "name": "constant.numeric.perm"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "=",
+          "name": "keyword.operator.assignment.perm"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.separator.method.perm"
+        },
+        {
+          "match": "[({}),;]",
+          "name": "punctuation.definition.parameters.perm"
+        },
+        {
+          "match": "<|>|<=|>=|==",
+          "name": "keyword.operator.comparison.perm"
+        },
+        {
+          "match": "&&|\\|\\||!",
+          "name": "keyword.operator.logical.perm"
+        }
+      ]
+    },
+    "relations": {
+      "patterns": [
+        {
+          "match": "\\B@\\w+\\b",
+          "name": "variable.other.readwrite.instance.perm"
+        },
+        {
+          "match": "\\b#\\w+",
+          "name": "entity.name.type.attribute-name.perm"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.perm",
+          "begin": "'",
+          "end": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.perm"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.perm"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.perm",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double.perm",
+          "begin": "\"",
+          "end": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.perm"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.perm"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.perm",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "match": "\\b(boolean|string|integer|double)(\\[\\])?\\b",
+          "name": "support.type.perm"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "variable.parameter.perm"
+            }
+          },
+          "match": "\\b([a-zA-Z0-9_]+)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "variable.parameter.perm"
+            },
+            "2": {
+              "name": "punctuation.separator.method.perm"
+            },
+            "3": {
+              "name": "entity.name.type.attribute-name.perm"
+            }
+          },
+          "match": "\\b([a-zA-Z0-9_]+)(\\.)([a-zA-Z0-9_]+)"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.perm"
+}

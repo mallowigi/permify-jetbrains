@@ -1,0 +1,25 @@
+{
+    "entity": {
+        "prefix": "entity",
+        "body": [
+            "entity ${1:foo} {",
+            "\t${0}",
+            "}"
+        ],
+        "description": "entity definition"
+    },
+    "relation": {
+        "prefix": "relation",
+        "body": [
+            "relation ${1:foo} @${2:bar}"
+        ],
+        "description": "relation definition"
+    },
+    "permission": {
+        "prefix": "permission",
+        "body": [
+            "permission ${1:foo} = ${0}"
+        ],
+        "description": "permission definition"
+    }
+}
