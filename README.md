@@ -13,7 +13,7 @@ the [TextMate Bundles](https://plugins.jetbrains.com/plugin/7221-textmate-bundle
 - Syntax highlighting
 - Basic code completion
 - Automatic indentation
-- Commenting
+- Simple commenting
 - Bracket matching
 
 ## Installation
@@ -21,6 +21,9 @@ the [TextMate Bundles](https://plugins.jetbrains.com/plugin/7221-textmate-bundle
 1. Open the Plugin Manager
 2. Search for `Permify Language Support`
 3. Click `Install`
+4. Restart the IDE
+
+Also, please create an `.editorconfig` file if you didn't already do so. This will help the plugin to correctly format and indent the code.
 
 ## Screenshots
 
@@ -30,12 +33,12 @@ the [TextMate Bundles](https://plugins.jetbrains.com/plugin/7221-textmate-bundle
 
 ## TODO
 
+- [ ] Color Scheme
 - [ ] File Templates
 - [ ] Convert to a first-party language
 - [ ] LSP Support
 - [ ] Error Highlighting
 - [ ] Tool Window for visualizing the permissions
-- [ ] Color Scheme
 
 ## Credits
 

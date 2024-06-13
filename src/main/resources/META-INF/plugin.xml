@@ -12,8 +12,8 @@
         <ul>
             <li>Syntax Highlighting</li>
             <li>Basic Code Completion</li>
-            <li>Automatic indentation</li>
-            <li>Commenting</li>
+            <li>Automatic indentation (with editorConfig)</li>
+            <li>Easy Commenting</li>
             <li>Bracket Matching</li>
             <li>Basic Snippets</li>
         </ul>
