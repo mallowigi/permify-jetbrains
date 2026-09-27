@@ -2,10 +2,15 @@ package com.mallowigi.permify.highlighter
 
 import com.intellij.openapi.application.PathManager
 import com.mallowigi.permify.PermifyFileType
+import org.jetbrains.plugins.textmate.bundles.TextMateNioResourceReader
 import org.jetbrains.plugins.textmate.bundles.readTextMateBundle
 import org.jetbrains.plugins.textmate.language.TextMateConcurrentMapInterner
 import org.jetbrains.plugins.textmate.language.TextMateLanguageDescriptor
 import org.jetbrains.plugins.textmate.language.syntax.TextMateSyntaxTableBuilder
+import org.jetbrains.plugins.textmate.plist.JsonOrXmlOrYamlPlistReader
+import org.jetbrains.plugins.textmate.plist.JsonPlistReader
+import org.jetbrains.plugins.textmate.plist.XmlPlistReader
+import org.jetbrains.plugins.textmate.plist.YamlPlistReader
 import java.io.File
 import java.io.IOException
 import java.io.UncheckedIOException
@@ -66,14 +71,18 @@ private fun deleteFile(file: File) {
 
 fun getTextMateLanguageDescriptor(): TextMateLanguageDescriptor {
   try {
-    val bundle = readTextMateBundle(getBundlePath())
+    val bundle = readTextMateBundle(
+      fallbackBundleName = "permify",
+      plistReader = JsonOrXmlOrYamlPlistReader(JsonPlistReader(), XmlPlistReader(), YamlPlistReader()),
+      resourceReader = TextMateNioResourceReader(getBundlePath()),
+    )
     val builder = TextMateSyntaxTableBuilder(TextMateConcurrentMapInterner())
     val grammars = bundle.readGrammars()
     for (grammar in grammars) {
       builder.addSyntax(grammar.plist.value)
     }
     val syntax = builder.build()
-    return TextMateLanguageDescriptor("source.perm", syntax.getSyntax("source.perm"))
+    return syntax.getLanguageDescriptor("source.perm")
   } catch (e: IOException) {
     throw RuntimeException(e)
   }
