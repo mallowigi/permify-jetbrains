@@ -20,15 +20,13 @@ plugins {
   alias(libs.plugins.ktlint)
 }
 
-val pluginGroup: String by project
-val pluginName: String by project
-val pluginVersion: String by project
-val pluginSinceBuild: String by project
-val pluginUntilBuild: String by project
-
-val platformVersion: String by project
-
-val javaVersion: String by project
+val pluginGroup: String = properties("pluginGroup")
+val pluginName: String = properties("pluginName")
+val pluginVersion: String = properties("pluginVersion")
+val pluginSinceBuild: String = properties("pluginSinceBuild")
+val pluginUntilBuild: String = properties("pluginUntilBuild")
+val platformVersion: String = properties("platformVersion")
+val javaVersion: String = properties("javaVersion")
 
 group = pluginGroup
 version = pluginVersion
@@ -49,14 +47,16 @@ dependencies {
 
   intellijPlatform {
     intellijIdeaUltimate(platformVersion, useInstaller = false)
-    instrumentationTools()
     pluginVerifier()
     zipSigner()
 
     bundledPlugins(
       "com.intellij.java",
       "org.jetbrains.plugins.textmate",
+      "intellij.textmate"
     )
+
+    bundledModule("intellij.textmate")
   }
 }
 
@@ -119,15 +119,10 @@ detekt {
 
 tasks {
   javaVersion.let {
-    // Set the compatibility versions to 1.8
+    // Set the compatibility versions to 21
     withType<JavaCompile> {
-      sourceCompatibility = it
-      targetCompatibility = it
-    }
-
-    withType<KotlinCompile> {
-      kotlinOptions.jvmTarget = it
-      kotlinOptions.freeCompilerArgs += listOf("-Xskip-prerelease-check")
+      sourceCompatibility = "25"
+      targetCompatibility = "25"
     }
 
     withType<Detekt> {
