@@ -1,7 +1,6 @@
 package com.mallowigi.permify.highlighter
 
-import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.application.PathManager
 import com.mallowigi.permify.PermifyFileType
 import org.jetbrains.plugins.textmate.bundles.readTextMateBundle
 import org.jetbrains.plugins.textmate.language.TextMateConcurrentMapInterner
@@ -15,15 +14,9 @@ import java.util.zip.ZipInputStream
 
 private fun getBundlePath(): Path {
   try {
-    val plugin = PluginManagerCore.getPlugin(PluginId.getId("com.mallowigi.permify"))
-    val version = plugin?.version ?: "latest"
-    val bundleDirectory = File("${plugin?.pluginPath}/bundles/$version")
+    val bundleDirectory = PathManager.getSystemDir().resolve("permify-bundle").toFile()
 
-    if (bundleDirectory.exists()) {
-      deleteFile(bundleDirectory)
-    }
-
-    deleteFile(bundleDirectory.getParentFile())
+    deleteFile(bundleDirectory)
     bundleDirectory.mkdirs()
     val resource = PermifyFileType::class.java.classLoader.getResourceAsStream("bundles/permify.zip")
 
