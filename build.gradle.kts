@@ -63,7 +63,7 @@ dependencies {
 
 
 kotlin {
-  jvmToolchain(17)
+  jvmToolchain(javaVersion.toInt())
 }
 
 intellijPlatform {
