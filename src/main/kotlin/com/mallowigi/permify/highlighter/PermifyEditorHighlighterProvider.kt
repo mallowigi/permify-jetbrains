@@ -16,7 +16,7 @@ class PermifyEditorHighlighterProvider : EditorHighlighterProvider {
     fileType: FileType,
     virtualFile: VirtualFile?,
     colors: EditorColorsScheme
-  ): EditorHighlighter? {
+  ): EditorHighlighter {
     val syntaxHighlighter = PermifyHighlighterFactory().getSyntaxHighlighter(project, virtualFile)
     return PermifyEditorHighlighter(syntaxHighlighter, colors)
   }

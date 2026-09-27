@@ -23,7 +23,7 @@ class PermifyHighlighter(private val lexer: PermifyHighlightingLexer) : SyntaxHi
     return when {
       // comments
       scope.startsWith("comment.")     -> {
-        return when {
+        when {
           scope.startsWith("comment.line.") -> pack(PERMIFY_COMMENT)
           else                              -> pack(PERMIFY_COMMENT)
         }
@@ -31,7 +31,7 @@ class PermifyHighlighter(private val lexer: PermifyHighlightingLexer) : SyntaxHi
 
       // strings
       scope.startsWith("string.")      -> {
-        return when {
+        when {
           scope.startsWith("string.quoted") -> pack(PERMIFY_STRING)
           else                              -> pack(PERMIFY_STRING)
         }
@@ -39,7 +39,7 @@ class PermifyHighlighter(private val lexer: PermifyHighlightingLexer) : SyntaxHi
 
       // brackets, punctuation, operators
       scope.startsWith("punctuation.") -> {
-        return when {
+        when {
           scope.startsWith("punctuation.definition.string")     -> pack(PERMIFY_STRING)
           scope.startsWith("punctuation.definition.parameters") -> pack(PERMIFY_BRACKETS)
           scope.startsWith("punctuation.separator.method")      -> pack(PERMIFY_DOT)
@@ -49,21 +49,21 @@ class PermifyHighlighter(private val lexer: PermifyHighlightingLexer) : SyntaxHi
 
       // keywords
       scope.startsWith("keyword.")     -> {
-        return when {
-          scope.startsWith("keyword.control.class")      -> return pack(PERMIFY_ENTITY)
-          scope.startsWith("keyword.control.relation")   -> return pack(PERMIFY_RELATION)
-          scope.startsWith("keyword.control.permission") -> return pack(PERMIFY_PERMISSION)
-          scope.startsWith("keyword.control")            -> return pack(PERMIFY_KEYWORD)
-          scope.startsWith("keyword.other.action")       -> return pack(PERMIFY_ACTION)
-          scope.startsWith("keyword.other.attribute")    -> return pack(PERMIFY_ATTRIBUTE_KEYWORD)
-          scope.startsWith("keyword.operator")           -> return pack(PERMIFY_OPERATOR)
-          else                                           -> return pack(PERMIFY_KEYWORD)
+        when {
+          scope.startsWith("keyword.control.class")      -> pack(PERMIFY_ENTITY)
+          scope.startsWith("keyword.control.relation")   -> pack(PERMIFY_RELATION)
+          scope.startsWith("keyword.control.permission") -> pack(PERMIFY_PERMISSION)
+          scope.startsWith("keyword.control")            -> pack(PERMIFY_KEYWORD)
+          scope.startsWith("keyword.other.action")       -> pack(PERMIFY_ACTION)
+          scope.startsWith("keyword.other.attribute")    -> pack(PERMIFY_ATTRIBUTE_KEYWORD)
+          scope.startsWith("keyword.operator")           -> pack(PERMIFY_OPERATOR)
+          else                                           -> pack(PERMIFY_KEYWORD)
         }
       }
 
       // constants
       scope.startsWith("constant.")    -> {
-        return when {
+        when {
           scope.startsWith("constant.numeric")   -> pack(PERMIFY_NUMBER)
           scope.startsWith("constant.character") -> pack(PERMIFY_STRING)
           else                                   -> pack(PERMIFY_NUMBER)
@@ -72,44 +72,44 @@ class PermifyHighlighter(private val lexer: PermifyHighlightingLexer) : SyntaxHi
 
       // Entities
       scope.startsWith("entity.name.") -> {
-        return when {
-          scope.startsWith("entity.name.type.class")          -> return pack(PERMIFY_ENTITY_NAME)
-          scope.startsWith("entity.name.type.attribute-name") -> return pack(PERMIFY_ATTRIBUTE)
-          scope.startsWith("entity.name.type.extension")      -> return pack(PERMIFY_EXTENSION)
-          scope.startsWith("entity.name.function")            -> return pack(PERMIFY_RULE_NAME)
-          else                                                -> return pack(PERMIFY_IDENTIFIER)
+        when {
+          scope.startsWith("entity.name.type.class")          -> pack(PERMIFY_ENTITY_NAME)
+          scope.startsWith("entity.name.type.attribute-name") -> pack(PERMIFY_ATTRIBUTE)
+          scope.startsWith("entity.name.type.extension")      -> pack(PERMIFY_EXTENSION)
+          scope.startsWith("entity.name.function")            -> pack(PERMIFY_RULE_NAME)
+          else                                                -> pack(PERMIFY_IDENTIFIER)
         }
       }
 
       // Variables
       scope.startsWith("variable.")    -> {
-        return when {
-          scope.startsWith("variable.language.relation")   -> return pack(PERMIFY_RELATION_NAME)
-          scope.startsWith("variable.language.permission") -> return pack(PERMIFY_PERMISSION_NAME)
-          scope.startsWith("variable.language.action")     -> return pack(PERMIFY_ACTION_NAME)
-          scope.startsWith("variable.language.attribute")  -> return pack(PERMIFY_ATTRIBUTE_NAME)
-          scope.startsWith("variable.language")            -> return pack(PERMIFY_PROPERTY)
-          scope.startsWith("variable.parameter.function")  -> return pack(PERMIFY_PARAMETER)
-          scope.startsWith("variable.parameter")           -> return pack(PERMIFY_IDENTIFIER)
-          scope.startsWith("variable.other")               -> return pack(PERMIFY_REFERENCE)
-          else                                             -> return pack(PERMIFY_IDENTIFIER)
+        when {
+          scope.startsWith("variable.language.relation")   -> pack(PERMIFY_RELATION_NAME)
+          scope.startsWith("variable.language.permission") -> pack(PERMIFY_PERMISSION_NAME)
+          scope.startsWith("variable.language.action")     -> pack(PERMIFY_ACTION_NAME)
+          scope.startsWith("variable.language.attribute")  -> pack(PERMIFY_ATTRIBUTE_NAME)
+          scope.startsWith("variable.language")            -> pack(PERMIFY_PROPERTY)
+          scope.startsWith("variable.parameter.function")  -> pack(PERMIFY_PARAMETER)
+          scope.startsWith("variable.parameter")           -> pack(PERMIFY_IDENTIFIER)
+          scope.startsWith("variable.other")               -> pack(PERMIFY_REFERENCE)
+          else                                             -> pack(PERMIFY_IDENTIFIER)
         }
       }
 
       // storage
       scope.startsWith("storage.")     -> {
-        return when {
-          scope.startsWith("storage.type") -> return pack(PERMIFY_RULE)
-          else                             -> return pack(PERMIFY_RULE)
+        when {
+          scope.startsWith("storage.type") -> pack(PERMIFY_RULE)
+          else                             -> pack(PERMIFY_RULE)
         }
       }
 
       // support
       scope.startsWith("support.")     -> {
-        return when {
-          scope.startsWith("support.function") -> return pack(PERMIFY_FUNCTION)
-          scope.startsWith("support.type")     -> return pack(PERMIFY_TYPE)
-          else                                 -> return pack(PERMIFY_FUNCTION)
+        when {
+          scope.startsWith("support.function") -> pack(PERMIFY_FUNCTION)
+          scope.startsWith("support.type")     -> pack(PERMIFY_TYPE)
+          else                                 -> pack(PERMIFY_FUNCTION)
         }
       }
 

@@ -11,9 +11,8 @@ object PermifyFileType : LanguageFileType(PermifyLanguage) {
 
   override fun getDescription(): @NlsContexts.Label String = "Permify File"
 
-  @Suppress("UnstableApiUsage")
   override fun getDefaultExtension(): @NlsSafe String = "perm"
 
-  override fun getIcon(): Icon? = PermifyIcons.PERMIFY_FILE
+  override fun getIcon(): Icon = PermifyIcons.PERMIFY_FILE
 
 }

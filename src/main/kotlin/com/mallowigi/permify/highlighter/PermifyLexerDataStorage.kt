@@ -13,6 +13,7 @@ class PermifyLexerDataStorage : ShortBasedStorage {
   private val tokenTypes: MutableList<PermifyElementType>
 
   constructor() : this(Object2IntOpenHashMap<PermifyElementType>(), ArrayList<PermifyElementType>())
+
   private constructor(
     tokenTypeMap: Object2IntMap<PermifyElementType>,
     tokenTypes: MutableList<PermifyElementType>
@@ -45,15 +46,9 @@ class PermifyLexerDataStorage : ShortBasedStorage {
     return 0
   }
 
-  override fun unpackTokenFromData(data: Int): IElementType {
-    return if (data != 0) tokenTypes[(abs(data.toDouble()) - 1).toInt()] else PermifyElementType(TextMateScope.EMPTY)
-  }
+  override fun unpackTokenFromData(data: Int): IElementType = if (data != 0) tokenTypes[(abs(data.toDouble()) - 1).toInt()] else PermifyElementType(TextMateScope.EMPTY)
 
-  override fun copy(): DataStorage {
-    return PermifyLexerDataStorage(myData, tokenTypeMap, tokenTypes)
-  }
+  override fun copy(): DataStorage = PermifyLexerDataStorage(myData, tokenTypeMap, tokenTypes)
 
-  override fun createStorage(): DataStorage {
-    return PermifyLexerDataStorage(tokenTypeMap, tokenTypes)
-  }
+  override fun createStorage(): DataStorage = PermifyLexerDataStorage(tokenTypeMap, tokenTypes)
 }

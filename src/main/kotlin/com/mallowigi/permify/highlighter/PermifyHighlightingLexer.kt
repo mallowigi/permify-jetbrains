@@ -6,7 +6,6 @@ import org.jetbrains.plugins.textmate.language.syntax.lexer.TextMateHighlighting
 
 class PermifyHighlightingLexer : TextMateHighlightingLexer(getTextMateLanguageDescriptor(), 20000) {
   override fun getTokenType(): IElementType? {
-    @Suppress("UsePropertyAccessSyntax")
     val tokenType = super.getTokenType() ?: return null
     return PermifyElementType((tokenType as TextMateElementType).scope)
   }

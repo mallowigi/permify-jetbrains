@@ -36,7 +36,7 @@ private fun getBundlePath(): Path {
 }
 
 private fun extract(zip: ZipInputStream, target: File) {
-  try {
+  zip.use { zip ->
     while (true) {
       val entry = zip.nextEntry ?: break
       val file = File(target, entry.name)
@@ -61,8 +61,6 @@ private fun extract(zip: ZipInputStream, target: File) {
       }
       output.close()
     }
-  } finally {
-    zip.close()
   }
 }
 

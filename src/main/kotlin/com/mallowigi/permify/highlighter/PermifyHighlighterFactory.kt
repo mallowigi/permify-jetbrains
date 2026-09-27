@@ -9,7 +9,5 @@ class PermifyHighlighterFactory : SyntaxHighlighterFactory() {
   override fun getSyntaxHighlighter(
     project: Project?,
     virtualFile: VirtualFile?
-  ): SyntaxHighlighter {
-    return PermifyHighlighter(PermifyHighlightingLexer())
-  }
+  ): SyntaxHighlighter = PermifyHighlighter(PermifyHighlightingLexer())
 }

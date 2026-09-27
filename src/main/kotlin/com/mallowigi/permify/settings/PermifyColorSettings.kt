@@ -15,110 +15,109 @@ class PermifyColorSettings : ColorSettingsPage {
 
   override fun getHighlighter(): SyntaxHighlighter = PermifyHighlighterFactory().getSyntaxHighlighter(null, null)
 
-  override fun getDemoText(): @NonNls String {
-    return return """<entity>entity</entity> <entity_name>user</entity_name> <operator>{</operator><operator>}</operator>
+  override fun getDemoText(): @NonNls String =
+    """<entity>entity</entity> <entity_name>user</entity_name> <operator>{</operator><operator>}</operator>
 <entity>entity</entity> <entity_name>bridge_user</entity_name> <operator>{</operator><operator>}</operator>
 
 <comment>// region foo</comment>
 <entity>entity</entity> <entity_name>bridge</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>customer_viewer</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>customer_limited_viewer</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>permissions_manager</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>super_admin</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>customer_viewer</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>customer_limited_viewer</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>permissions_manager</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>super_admin</relation_name> <instance>@bridge_user</instance>
 
-    <action>action</action> <action_name>edit_account_list</action_name> <operator>=</operator> <ident>super_admin</ident> <control>or</control> <ident>permissions_manager</ident>
-    <action>action</action> <action_name>assign_permissions_manager</action_name> <operator>=</operator> <ident>super_admin</ident>
+  <action>action</action> <action_name>edit_account_list</action_name> <operator>=</operator> <ident>super_admin</ident> <control>or</control> <ident>permissions_manager</ident>
+  <action>action</action> <action_name>assign_permissions_manager</action_name> <operator>=</operator> <ident>super_admin</ident>
 <operator>}</operator>
 <comment>// endregion</comment>
 
 
 <entity>entity</entity> <entity_name>customer_publisher</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>member</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>member</relation_name> <instance>@bridge_user</instance>
 <operator>}</operator>
 
 <entity>entity</entity> <entity_name>publisher</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>bridge</relation_name> <instance>@bridge</instance>
-    <relation>relation</relation> <relation_name>accessor</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>type</relation_name> <instance>@test_publisher</instance> <instance>@customer_publisher</instance>
+  <relation>relation</relation> <relation_name>bridge</relation_name> <instance>@bridge</instance>
+  <relation>relation</relation> <relation_name>accessor</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>type</relation_name> <instance>@test_publisher</instance> <instance>@customer_publisher</instance>
 
-    <permission>permission</permission> <permission_name>bridge_customer_limited_viewer</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>customer_limited_viewer</ident>
-    <permission>permission</permission> <permission_name>bridge_customer_viewer</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>customer_viewer</ident>
-    <permission>permission</permission> <permission_name>bridge_permissions_manager</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>permissions_manager</ident>
-    <permission>permission</permission> <permission_name>bridge_admin</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>administrator</ident>
-    <permission>permission</permission> <permission_name>bridge_super_admin</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>super_admin</ident>
-    <permission>permission</permission> <permission_name>bridge_right_type</permission_name> <operator>=</operator> <operator>(</operator><ident>bridge_customer_viewer</ident> <control>and</control> <ident>type</ident><dot>.</dot><ident>member</ident><operator>)</operator> <control>or</control> <operator>(</operator><ident>bridge_customer_limited_viewer</ident> <control>and</control> <ident>type</ident><dot>.</dot><ident>member</ident><operator>)</operator>
+  <permission>permission</permission> <permission_name>bridge_customer_limited_viewer</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>customer_limited_viewer</ident>
+  <permission>permission</permission> <permission_name>bridge_customer_viewer</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>customer_viewer</ident>
+  <permission>permission</permission> <permission_name>bridge_permissions_manager</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>permissions_manager</ident>
+  <permission>permission</permission> <permission_name>bridge_admin</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>administrator</ident>
+  <permission>permission</permission> <permission_name>bridge_super_admin</permission_name> <operator>=</operator> <ident>bridge</ident><dot>.</dot><ident>super_admin</ident>
+  <permission>permission</permission> <permission_name>bridge_right_type</permission_name> <operator>=</operator> <operator>(</operator><ident>bridge_customer_viewer</ident> <control>and</control> <ident>type</ident><dot>.</dot><ident>member</ident><operator>)</operator> <control>or</control> <operator>(</operator><ident>bridge_customer_limited_viewer</ident> <control>and</control> <ident>type</ident><dot>.</dot><ident>member</ident><operator>)</operator>
 
-    <permission>permission</permission> <permission_name>viewer_access <operator>=</operator> <ident>bridge_customer_viewer</ident> <control>or</control> <operator>(</operator><ident>bridge_customer_limited_viewer</ident> <control>and</control> <ident>accessor</ident><operator>)</operator>
-    <permission>permission</permission> <permission_name>admin_access</permission_name> <operator>=</operator> <ident>bridge_permissions_manager</ident> <control>or</control> <ident>bridge_super_admin</ident> <control>or</control> <ident>bridge_admin</ident> <control>or</control> <ident>bridge_right_type</ident>
+  <permission>permission</permission> <permission_name>viewer_access <operator>=</operator> <ident>bridge_customer_viewer</ident> <control>or</control> <operator>(</operator><ident>bridge_customer_limited_viewer</ident> <control>and</control> <ident>accessor</ident><operator>)</operator>
+  <permission>permission</permission> <permission_name>admin_access</permission_name> <operator>=</operator> <ident>bridge_permissions_manager</ident> <control>or</control> <ident>bridge_super_admin</ident> <control>or</control> <ident>bridge_admin</ident> <control>or</control> <ident>bridge_right_type</ident>
 
-    <action>action</action> <action_name>deactivate</action_name> <operator>=</operator> <ident>admin_access</ident>
-    <action>action</action> <action_name>access</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
-    <action>action</action> <action_name>ff_edit</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
-    <action>action</action> <action_name>add_feed_properties</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
+  <action>action</action> <action_name>deactivate</action_name> <operator>=</operator> <ident>admin_access</ident>
+  <action>action</action> <action_name>access</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
+  <action>action</action> <action_name>ff_edit</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
+  <action>action</action> <action_name>add_feed_properties</action_name> <operator>=</operator> <ident>admin_access</ident> <control>or</control> <ident>viewer_access</ident>
 <operator>}</operator>
 
 
 <entity>entity</entity> <entity_name>test_section</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>sales</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>viewer</relation_name> <instance>@bridge_user</instance>
-    <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>sales</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>viewer</relation_name> <instance>@bridge_user</instance>
+  <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@bridge_user</instance>
 
-    <action>action</action> <action_name>admin</action_name> <operator>=</operator> <ident>administrator</ident> <control>or</control> <ident>sales</ident>
-    <action>action</action> <action_name>view</action_name> <operator>=</operator> <ident>admin</ident> <control>or</control> <ident>viewer</ident>
+  <action>action</action> <action_name>admin</action_name> <operator>=</operator> <ident>administrator</ident> <control>or</control> <ident>sales</ident>
+  <action>action</action> <action_name>view</action_name> <operator>=</operator> <ident>admin</ident> <control>or</control> <ident>viewer</ident>
 <operator>}</operator>
 
 <entity>entity</entity> <entity_name>predefined_role</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>member</relation_name> <instance>@user</instance>
+  <relation>relation</relation> <relation_name>member</relation_name> <instance>@user</instance>
 <operator>}</operator>
 
 <entity>entity</entity> <entity_name>section</entity_name> <operator>{</operator>
-    <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
-    <relation>relation</relation> <relation_name>editor</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
-    <relation>relation</relation> <relation_name>viewer</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
-    <relation>relation</relation> <relation_name>no_access</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
+  <relation>relation</relation> <relation_name>administrator</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
+  <relation>relation</relation> <relation_name>editor</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
+  <relation>relation</relation> <relation_name>viewer</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
+  <relation>relation</relation> <relation_name>no_access</relation_name> <instance>@user</instance> <instance>@predefined_role</instance><transitive>#member</transitive>
 
-    <relation>relation</relation> <relation_name>type</relation_name> <instance>@test_section</instance> <instance>@customer_section</instance>
+  <relation>relation</relation> <relation_name>type</relation_name> <instance>@test_section</instance> <instance>@customer_section</instance>
 
-    <action>action</action> <action_name>admin</action_name> <operator>=</operator> <ident>administrator</ident> <control>or</control> <ident>type</ident><dot>.</dot><extension>admin</extension>
-    <action>action</action> <action_name>edit</action_name> <operator>=</operator> <ident>admin</ident> <control>or</control> <ident>editor</ident>
-    <action>action</action> <action_name>view</action_name> <operator>=</operator> <ident>edit</ident> <control>or</control> <ident>viewer</ident> <control>or</control> <ident>type</ident><dot>.</dot><extension>view</extension>
+  <action>action</action> <action_name>admin</action_name> <operator>=</operator> <ident>administrator</ident> <control>or</control> <ident>type</ident><dot>.</dot><extension>admin</extension>
+  <action>action</action> <action_name>edit</action_name> <operator>=</operator> <ident>admin</ident> <control>or</control> <ident>editor</ident>
+  <action>action</action> <action_name>view</action_name> <operator>=</operator> <ident>edit</ident> <control>or</control> <ident>viewer</ident> <control>or</control> <ident>type</ident><dot>.</dot><extension>view</extension>
 <operator>}</operator>
 
 <permission>permission</permission> <permission_name>read</permission_name> <operator>=</operator>  <ident>org</ident><dot>.</dot><extension>admin</extension> <control>and</control> <operator>(</operator><ident>owner</ident> <control>or</control> <ident>maintainer</ident> <control>or</control> <ident>org</ident><dot>.</dot><extension>member</extension><operator>)</operator>
 
 <entity>entity</entity> <entity_name>organization</entity_name> <operator>{</operator>
 
-	<relation>relation</relation> <relation_name>admin</relation_name> <instance>@user</instance>
+<relation>relation</relation> <relation_name>admin</relation_name> <instance>@user</instance>
 
-	<attribute>attribute</attribute> <attribute_name>ip_range</attribute_name> <type>string[]</type>
+<attribute>attribute</attribute> <attribute_name>ip_range</attribute_name> <type>string[]</type>
 
-	<permission>permission</permission> <permission_name>view</permission_name> <operator>=</operator> <function>check_ip_range</function><operator>(</operator><ident>request</ident><dot>.</dot><extension>ip</extension><operator>,</operator> <ident>ip_range</ident><operator>)</operator> <control>or</control> <ident>admin</ident>
+<permission>permission</permission> <permission_name>view</permission_name> <operator>=</operator> <function>check_ip_range</function><operator>(</operator><ident>request</ident><dot>.</dot><extension>ip</extension><operator>,</operator> <ident>ip_range</ident><operator>)</operator> <control>or</control> <ident>admin</ident>
 <operator>}</operator>
 
 <rule>rule</rule> <rule_name>check_ip_range</rule_name><operator>(</operator><param>ip</param> <type>string</type><operator>,</operator> <param>ip_range</param> <type>string[]</type><operator>)</operator> <operator>{</operator>
-	<ident>ip</ident> <control>in</control> <ident>ip_range</ident>
+<ident>ip</ident> <control>in</control> <ident>ip_range</ident>
 <operator>}</operator>
 
 <entity>entity</entity> <entity_name>post</entity_name> <operator>{</operator>
-	<attribute>attribute</attribute> <attribute_name>is_public</attribute_name> <type>boolean</type>
+<attribute>attribute</attribute> <attribute_name>is_public</attribute_name> <type>boolean</type>
 
-	<permission>permission</permission> <permission_name>view</permission_name> <operator>=</operator> <ident>is_public</ident>
+<permission>permission</permission> <permission_name>view</permission_name> <operator>=</operator> <ident>is_public</ident>
 <operator>}</operator>
 
 <rule>rule</rule> <rule_name>check_location</rule_name><operator>(</operator><param>current_location</param> <type>string</type><operator>,</operator> <param>location</param> <type>string[]</type><operator>)</operator> <operator>{</operator>
-	<ident>current_location</ident> <control>in</control> <ident>location</ident>
+<ident>current_location</ident> <control>in</control> <ident>location</ident>
 <operator>}</operator>
 
 <rule>rule</rule> <rule_name>check_age</rule_name><operator>(</operator><param>age</param> <type>integer</type><operator>)</operator> <operator>{</operator>
-	<ident>age</ident> <operator>>=</operator> <number>18</number> <control>&&</control> <ident>age</ident> <operator>></operator> <number>10</number>
+<ident>age</ident> <operator>>=</operator> <number>18</number> <control>&&</control> <ident>age</ident> <operator>></operator> <number>10</number>
 <operator>}</operator>
 
 <rule>rule</rule> <rule_name>is_weekday</rule_name><operator>(</operator><param>day_of_week</param> <type>string</type><operator>)</operator> <operator>{</operator>
-    <ident>day_of_week</ident> <operator>!=</operator> <string>'saturday'</string> <control>&&</control> <ident>day_of_week</ident> <operator>!=</operator> <string>'sunday'</string>
+  <ident>day_of_week</ident> <operator>!=</operator> <string>'saturday'</string> <control>&&</control> <ident>day_of_week</ident> <operator>!=</operator> <string>'sunday'</string>
 <operator>}</operator>
 """.trimIndent()
-  }
 
   override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? = DESCRIPTORS
 
