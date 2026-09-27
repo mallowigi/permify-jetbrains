@@ -2,11 +2,11 @@ package com.mallowigi.permify.highlighter
 
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.extensions.PluginId
-import com.intellij.util.containers.Interner
 import com.mallowigi.permify.PermifyFileType
 import org.jetbrains.plugins.textmate.bundles.readTextMateBundle
+import org.jetbrains.plugins.textmate.language.TextMateConcurrentMapInterner
 import org.jetbrains.plugins.textmate.language.TextMateLanguageDescriptor
-import org.jetbrains.plugins.textmate.language.syntax.TextMateSyntaxTable
+import org.jetbrains.plugins.textmate.language.syntax.TextMateSyntaxTableBuilder
 import java.io.File
 import java.io.IOException
 import java.io.UncheckedIOException
@@ -76,12 +76,12 @@ private fun deleteFile(file: File) {
 fun getTextMateLanguageDescriptor(): TextMateLanguageDescriptor {
   try {
     val bundle = readTextMateBundle(getBundlePath())
-    val syntax = TextMateSyntaxTable()
-    val interner = Interner.createWeakInterner<CharSequence>()
+    val builder = TextMateSyntaxTableBuilder(TextMateConcurrentMapInterner())
     val grammars = bundle.readGrammars()
     for (grammar in grammars) {
-      syntax.loadSyntax(grammar.plist.value, interner)
+      builder.addSyntax(grammar.plist.value)
     }
+    val syntax = builder.build()
     return TextMateLanguageDescriptor("source.perm", syntax.getSyntax("source.perm"))
   } catch (e: IOException) {
     throw RuntimeException(e)

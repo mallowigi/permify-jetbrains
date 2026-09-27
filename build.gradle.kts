@@ -1,7 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = providers.gradleProperty(key).get()
 
@@ -46,17 +45,19 @@ dependencies {
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
 
   intellijPlatform {
-    intellijIdeaUltimate(platformVersion, useInstaller = false)
+    intellijIdeaUltimate(platformVersion) {
+      useInstaller = false
+    }
     pluginVerifier()
     zipSigner()
 
     bundledPlugins(
       "com.intellij.java",
       "org.jetbrains.plugins.textmate",
-      "intellij.textmate"
     )
 
     bundledModule("intellij.textmate")
+    bundledModule("intellij.textmate.core")
   }
 }
 
@@ -121,8 +122,8 @@ tasks {
   javaVersion.let {
     // Set the compatibility versions to 21
     withType<JavaCompile> {
-      sourceCompatibility = "25"
-      targetCompatibility = "25"
+      sourceCompatibility = it
+      targetCompatibility = it
     }
 
     withType<Detekt> {
