@@ -30,8 +30,8 @@
         <defaultLiveTemplates file="templates/permify.xml"/>
 
         <fileIndentOptionsProvider
-            implementation="com.mallowigi.PermifyFileIndentOptionsProvider"
-            id="PermifyFileIndentOptionsProvider"/>
+                implementation="com.mallowigi.PermifyFileIndentOptionsProvider"
+                id="PermifyFileIndentOptionsProvider"/>
 
         <fileIconProvider implementation="com.mallowigi.permify.PermifyFileIconProvider"/>
 
@@ -45,6 +45,8 @@
                                    implementationClass="com.mallowigi.permify.highlighter.PermifyEditorHighlighterProvider"/>
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
+
+        <formattingService implementation="com.mallowigi.permify.PermifyFormattingService"/>
 
 
     </extensions>
