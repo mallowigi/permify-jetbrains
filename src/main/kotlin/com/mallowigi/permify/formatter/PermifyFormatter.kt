@@ -92,6 +92,10 @@ object PermifyFormatter {
     // Replace multiple spaces with a single space
     result = result.replace(Regex("[ \t]+"), " ")
 
+    // Strip trailing whitespace on each line so whitespace-only lines become truly empty
+    // (otherwise they aren't a literal run of "\n" and the blank-line collapse below misses them)
+    result = result.replace(Regex("[ \t]+\n"), "\n")
+
     // Collapse 2+ blank lines (3+ consecutive newlines) down to exactly one blank line
     result = result.replace(Regex("\n{3,}"), "\n".repeat(options.maxBlankLines + 1))
 
@@ -122,8 +126,7 @@ object PermifyFormatter {
     var depth = 0
     var offset = 0
 
-    // Loop over lines
-    for (line in lines) {
+    for ((index, line) in lines.withIndex()) {
       val lineStart = offset
       val trimmed = line.trim()
       // Count the number of opening and closing braces in the line
@@ -140,18 +143,22 @@ object PermifyFormatter {
         }
       }
 
-      // If the line starts with closing braces, we need to decrease the depth before printing the line
-      val leadingCloses = trimmed.takeWhile { it == '}' }.length
-      val indent = maxOf(0, depth - leadingCloses)
-      val tabCharacter = if (options.useTabCharacter) "\t" else " ".repeat(options.indentSize)
+      // Skip last line if it is empty to prevent adding newlines after it
+      val isTrailingArtifact = trimmed.isEmpty() && index == lines.lastIndex
+      if (!isTrailingArtifact) {
+        // If the line starts with closing braces, we need to decrease the depth before printing the line
+        val leadingCloses = trimmed.takeWhile { it == '}' }.length
+        val indent = maxOf(0, depth - leadingCloses)
+        val tabCharacter = if (options.useTabCharacter) "\t" else " ".repeat(options.indentSize)
 
-      if (trimmed.isEmpty()) {
-        result.append("")
-      } else {
-        result.append(tabCharacter.repeat(indent))
-        result.append(trimmed)
+        if (trimmed.isEmpty()) {
+          result.append("")
+        } else {
+          result.append(tabCharacter.repeat(indent))
+          result.append(trimmed)
+        }
+        result.append("\n")
       }
-      result.append("\n")
 
       depth += opens - closes
       offset += line.length + 1
