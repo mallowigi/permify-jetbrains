@@ -84,6 +84,9 @@ object PermifyFormatter {
     // Replace multiple spaces with a single space
     result = result.replace(Regex("[ \t]+"), " ")
 
+    // Collapse 2+ blank lines (3+ consecutive newlines) down to exactly one blank line
+    result = result.replace(Regex("\n{3,}"), "\n\n")
+
     // Remove spaces around braces and parentheses
     result = result.replace(Regex("[ \t]*([()])[ \t]*"), "$1")
 
