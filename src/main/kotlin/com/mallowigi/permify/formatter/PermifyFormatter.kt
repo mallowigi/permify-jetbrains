@@ -4,6 +4,23 @@ import com.mallowigi.permify.highlighter.PermifyElementType
 import com.mallowigi.permify.highlighter.PermifyHighlightingLexer
 
 object PermifyFormatter {
+  // Represents a segment of text and whether it is protected (inside a comment or string literal)
+  private data class Segment(val text: String, val isProtected: Boolean)
+
+  private val KEYWORDS = setOf(
+    "entity",
+    "relation",
+    "permission",
+    "action",
+    "attribute",
+    "rule",
+    "return",
+    "and",
+    "or",
+    "not",
+    "in"
+  )
+
   fun debugTokens(text: String) {
     val lexer = PermifyHighlightingLexer()
     lexer.start(text)
@@ -35,12 +52,59 @@ object PermifyFormatter {
     return protected
   }
 
+  private fun toSegments(text: String, protected: BooleanArray): List<Segment> {
+    val segments = mutableListOf<Segment>()
+    var i = 0
+    while (i < text.length) {
+      val start = i
+      val isProtected = protected[i]
+
+      while (i < text.length && protected[i] == isProtected) i++
+
+      segments.add(Segment(text.substring(start, i), isProtected))
+    }
+    return segments
+  }
+
+  fun normalizeSpacing(text: String): String {
+    val protected = protectedRanges(text)
+    val segments = toSegments(text, protected)
+
+    return segments.joinToString("") {
+      when {
+        it.isProtected -> it.text
+        else -> normalizeText(it.text)
+      }
+    }
+  }
+
+  private fun normalizeText(text: String): String {
+    var result = text
+
+    // Replace multiple spaces with a single space
+    result = result.replace(Regex("[ \t]+"), " ")
+
+    // Remove spaces around braces and parentheses
+    result = result.replace(Regex("[ \t]*([()])[ \t]*"), "$1")
+
+    // Add spaces between operators
+    result = result.replace(Regex("[ \t]*([=<>!&|]+)[ \t]*"), " $1 ")
+
+    // Add spaces around keywords
+    for (keyword in KEYWORDS) {
+      result = result.replace(Regex("\\b$keyword\\b(?!\\s)"), " $keyword ")
+    }
+
+    return result
+  }
+
   /**
    * Indentation formatter using depth
    */
   fun format(text: String): String {
-    val protected = protectedRanges(text)
-    val lines = text.split("\n")
+    val normalized = normalizeSpacing(text)
+    val protected = protectedRanges(normalized)
+    val lines = normalized.split("\n")
     val result = StringBuilder()
     var depth = 0
     var offset = 0
