@@ -3,6 +3,7 @@ package com.mallowigi.permify.formatter
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class PermifyFormatterTest : BasePlatformTestCase() {
+
   fun testDebugTokens() {
     val text = """
       entity user {}

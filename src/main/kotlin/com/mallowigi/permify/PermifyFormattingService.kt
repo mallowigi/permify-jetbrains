@@ -21,14 +21,16 @@ class PermifyFormattingService : AsyncDocumentFormattingService() {
       try {
         val codeStyleSettings = req.context.codeStyleSettings
         val commonSettings = codeStyleSettings.getCommonSettings(PermifyLanguage)
+        val indentOptions = req.context.virtualFile?.let { codeStyleSettings.getIndentOptions(it.fileType) }
+          ?: codeStyleSettings.indentOptions
 
         val formatted = PermifyFormatter.format(
           req.documentText, PermifyFormatterOptions(
-            useTabCharacter = codeStyleSettings.indentOptions.USE_TAB_CHARACTER,
-            indentSize = codeStyleSettings.indentOptions.INDENT_SIZE,
+            useTabCharacter = indentOptions.USE_TAB_CHARACTER,
+            indentSize = indentOptions.INDENT_SIZE,
             maxBlankLines = commonSettings.KEEP_BLANK_LINES_IN_CODE,
             spaceAroundOperators = commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS,
-            spaceAroundBraces = commonSettings.SPACE_WITHIN_BRACES
+            spaceAroundBraces = !commonSettings.SPACE_WITHIN_BRACES // inverted: our flag means "strip spaces", theirs means "keep spaces"
           )
         )
         req.onTextReady(formatted)

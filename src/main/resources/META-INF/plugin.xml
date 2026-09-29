@@ -29,10 +29,6 @@
                              order="first"/>
         <defaultLiveTemplates file="templates/permify.xml"/>
 
-        <fileIndentOptionsProvider
-                implementation="com.mallowigi.PermifyFileIndentOptionsProvider"
-                id="PermifyFileIndentOptionsProvider"/>
-
         <fileIconProvider implementation="com.mallowigi.permify.PermifyFileIconProvider"/>
 
         <fileType name="permify"
@@ -48,6 +44,7 @@
 
         <formattingService implementation="com.mallowigi.permify.PermifyFormattingService"/>
 
+        <langCodeStyleSettingsProvider implementation="com.mallowigi.permify.PermifyLanguageCodeStyleSettingsProvider"/>
 
     </extensions>
 </idea-plugin>
