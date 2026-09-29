@@ -99,9 +99,9 @@ object PermifyFormatter {
     // Collapse 2+ blank lines (3+ consecutive newlines) down to exactly one blank line
     result = result.replace(Regex("\n{3,}"), "\n".repeat(options.maxBlankLines + 1))
 
-    // Remove spaces around braces and parentheses
+    // Add spaces before braces
     if (options.spaceAroundBraces) {
-      result = result.replace(Regex("[ \t]*([()])[ \t]*"), "$1")
+      result = result.replace(Regex("[ \t]*([{}])[ \t]*"), " $1 ")
     }
 
     // Add spaces between operators

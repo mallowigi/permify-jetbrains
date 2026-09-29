@@ -2,6 +2,7 @@ package com.mallowigi.permify
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable
 import com.intellij.application.options.CodeStyleAbstractPanel
+import com.intellij.application.options.IndentOptionsEditor
 import com.intellij.application.options.TabbedLanguageCodeStylePanel
 import com.intellij.lang.Language
 import com.intellij.psi.codeStyle.*
@@ -10,6 +11,8 @@ class PermifyLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvid
   override fun getLanguage(): Language = PermifyLanguage
 
   override fun getCodeSample(settingsType: SettingsType): String = SAMPLE
+
+  override fun getIndentOptionsEditor(): IndentOptionsEditor = IndentOptionsEditor(this)
 
   override fun createConfigurable(
     settings: CodeStyleSettings,
@@ -52,7 +55,7 @@ class PermifyLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvid
     indentOptions.INDENT_SIZE = 2
     indentOptions.TAB_SIZE = 2
     commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS = true
-    commonSettings.SPACE_WITHIN_PARENTHESES = false
+    commonSettings.SPACE_WITHIN_BRACES = true
     commonSettings.KEEP_BLANK_LINES_IN_CODE = 1
   }
 

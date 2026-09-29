@@ -12,7 +12,7 @@ class PermifyFormattingService : AsyncDocumentFormattingService() {
   override fun getFeatures(): Set<FormattingService.Feature?> =
     mutableSetOf(FormattingService.Feature.AD_HOC_FORMATTING)
 
-  override fun canFormat(psiFile: PsiFile): Boolean = psiFile.virtualFile?.fileType == PermifyFileType
+  override fun canFormat(psiFile: PsiFile): Boolean = psiFile.viewProvider.virtualFile.fileType == PermifyFileType
 
   override fun createFormattingTask(req: AsyncFormattingRequest): FormattingTask = object : FormattingTask {
     override fun cancel(): Boolean = false
@@ -21,8 +21,8 @@ class PermifyFormattingService : AsyncDocumentFormattingService() {
       try {
         val codeStyleSettings = req.context.codeStyleSettings
         val commonSettings = codeStyleSettings.getCommonSettings(PermifyLanguage)
-        val indentOptions = req.context.virtualFile?.let { codeStyleSettings.getIndentOptions(it.fileType) }
-          ?: codeStyleSettings.indentOptions
+        val fileType = req.context.containingFile.viewProvider.virtualFile.fileType
+        val indentOptions = codeStyleSettings.getIndentOptions(fileType)
 
         val formatted = PermifyFormatter.format(
           req.documentText, PermifyFormatterOptions(
