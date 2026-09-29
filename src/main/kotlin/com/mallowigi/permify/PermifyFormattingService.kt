@@ -6,6 +6,7 @@ import com.intellij.formatting.service.FormattingService
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiFile
 import com.mallowigi.permify.formatter.PermifyFormatter
+import com.mallowigi.permify.formatter.PermifyFormatterOptions
 
 class PermifyFormattingService : AsyncDocumentFormattingService() {
   override fun getFeatures(): Set<FormattingService.Feature?> =
@@ -13,12 +14,23 @@ class PermifyFormattingService : AsyncDocumentFormattingService() {
 
   override fun canFormat(psiFile: PsiFile): Boolean = psiFile.virtualFile?.fileType == PermifyFileType
 
-  override fun createFormattingTask(req: AsyncFormattingRequest): FormattingTask? = object : FormattingTask {
+  override fun createFormattingTask(req: AsyncFormattingRequest): FormattingTask = object : FormattingTask {
     override fun cancel(): Boolean = false
 
     override fun run() {
       try {
-        val formatted = PermifyFormatter.format(req.documentText)
+        val codeStyleSettings = req.context.codeStyleSettings
+        val commonSettings = codeStyleSettings.getCommonSettings(PermifyLanguage)
+
+        val formatted = PermifyFormatter.format(
+          req.documentText, PermifyFormatterOptions(
+            useTabCharacter = codeStyleSettings.indentOptions.USE_TAB_CHARACTER,
+            indentSize = codeStyleSettings.indentOptions.INDENT_SIZE,
+            maxBlankLines = commonSettings.KEEP_BLANK_LINES_IN_CODE,
+            spaceAroundOperators = commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS,
+            spaceAroundBraces = commonSettings.SPACE_WITHIN_BRACES
+          )
+        )
         req.onTextReady(formatted)
       } catch (e: Exception) {
         req.onError("Formatting failed", e.message ?: "Unknown error")

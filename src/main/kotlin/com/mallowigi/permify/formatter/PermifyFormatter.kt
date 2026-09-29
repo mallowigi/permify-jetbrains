@@ -3,6 +3,14 @@ package com.mallowigi.permify.formatter
 import com.mallowigi.permify.highlighter.PermifyElementType
 import com.mallowigi.permify.highlighter.PermifyHighlightingLexer
 
+data class PermifyFormatterOptions(
+  val useTabCharacter: Boolean = false,
+  val indentSize: Int = 2,
+  val maxBlankLines: Int = 1,
+  val spaceAroundOperators: Boolean = true,
+  val spaceAroundBraces: Boolean = true
+)
+
 object PermifyFormatter {
   // Represents a segment of text and whether it is protected (inside a comment or string literal)
   private data class Segment(val text: String, val isProtected: Boolean)
@@ -66,32 +74,37 @@ object PermifyFormatter {
     return segments
   }
 
-  fun normalizeSpacing(text: String): String {
+  fun normalizeSpacing(text: String, options: PermifyFormatterOptions = PermifyFormatterOptions()): String {
     val protected = protectedRanges(text)
     val segments = toSegments(text, protected)
 
     return segments.joinToString("") {
       when {
         it.isProtected -> it.text
-        else -> normalizeText(it.text)
+        else -> normalizeText(it.text, options)
       }
     }
   }
 
-  private fun normalizeText(text: String): String {
+  private fun normalizeText(text: String, options: PermifyFormatterOptions = PermifyFormatterOptions()): String {
     var result = text
 
     // Replace multiple spaces with a single space
     result = result.replace(Regex("[ \t]+"), " ")
 
     // Collapse 2+ blank lines (3+ consecutive newlines) down to exactly one blank line
-    result = result.replace(Regex("\n{3,}"), "\n\n")
+    result = result.replace(Regex("\n{3,}"), "\n".repeat(options.maxBlankLines + 1))
 
     // Remove spaces around braces and parentheses
-    result = result.replace(Regex("[ \t]*([()])[ \t]*"), "$1")
+    if (options.spaceAroundBraces) {
+      result = result.replace(Regex("[ \t]*([()])[ \t]*"), "$1")
+    }
 
     // Add spaces between operators
-    result = result.replace(Regex("[ \t]*([=<>!&|]+)[ \t]*"), " $1 ")
+    if (options.spaceAroundOperators) {
+      result = result.replace(Regex("[ \t]*([=<>!&|]+)[ \t]*"), " $1 ")
+    }
+
 
     // Add spaces around keywords
     for (keyword in KEYWORDS) {
@@ -101,11 +114,8 @@ object PermifyFormatter {
     return result
   }
 
-  /**
-   * Indentation formatter using depth
-   */
-  fun format(text: String): String {
-    val normalized = normalizeSpacing(text)
+  fun format(text: String, options: PermifyFormatterOptions = PermifyFormatterOptions()): String {
+    val normalized = normalizeSpacing(text, options)
     val protected = protectedRanges(normalized)
     val lines = normalized.split("\n")
     val result = StringBuilder()
@@ -133,11 +143,12 @@ object PermifyFormatter {
       // If the line starts with closing braces, we need to decrease the depth before printing the line
       val leadingCloses = trimmed.takeWhile { it == '}' }.length
       val indent = maxOf(0, depth - leadingCloses)
+      val tabCharacter = if (options.useTabCharacter) "\t" else " ".repeat(options.indentSize)
 
       if (trimmed.isEmpty()) {
         result.append("")
       } else {
-        result.append("\t".repeat(indent))
+        result.append(tabCharacter.repeat(indent))
         result.append(trimmed)
       }
       result.append("\n")
@@ -146,7 +157,6 @@ object PermifyFormatter {
       offset += line.length + 1
     }
 
-    // Remove trailing newlines and add a newline at the end of the file
-    return result.toString().trimEnd('\n') + "\n"
+    return result.toString()
   }
 }
