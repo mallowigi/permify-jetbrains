@@ -1,5 +1,7 @@
 package com.mallowigi.permify.formatter
 
+import com.mallowigi.permify.PermifyFileType
+import com.mallowigi.permify.PermifyLanguage
 import com.mallowigi.permify.highlighter.PermifyElementType
 import com.mallowigi.permify.highlighter.PermifyHighlightingLexer
 
@@ -9,7 +11,22 @@ data class PermifyFormatterOptions(
   val maxBlankLines: Int = 1,
   val spaceAroundOperators: Boolean = true,
   val spaceAroundBraces: Boolean = true
-)
+) {
+  companion object {
+    /** Builds options from the real IntelliJ Code Style settings for [PermifyLanguage]. */
+    fun from(codeStyleSettings: com.intellij.psi.codeStyle.CodeStyleSettings): PermifyFormatterOptions {
+      val commonSettings = codeStyleSettings.getCommonSettings(PermifyLanguage)
+      val indentOptions = codeStyleSettings.getIndentOptions(PermifyFileType)
+      return PermifyFormatterOptions(
+        useTabCharacter = indentOptions.USE_TAB_CHARACTER,
+        indentSize = indentOptions.INDENT_SIZE,
+        maxBlankLines = commonSettings.KEEP_BLANK_LINES_IN_CODE,
+        spaceAroundOperators = commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS,
+        spaceAroundBraces = !commonSettings.SPACE_WITHIN_BRACES
+      )
+    }
+  }
+}
 
 object PermifyFormatter {
   // Represents a segment of text and whether it is protected (inside a comment or string literal)

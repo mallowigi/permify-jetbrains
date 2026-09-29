@@ -12,27 +12,16 @@ class PermifyFormattingService : AsyncDocumentFormattingService() {
   override fun getFeatures(): Set<FormattingService.Feature?> =
     mutableSetOf(FormattingService.Feature.AD_HOC_FORMATTING)
 
-  override fun canFormat(psiFile: PsiFile): Boolean = psiFile.viewProvider.virtualFile.fileType == PermifyFileType
+  override fun canFormat(psiFile: PsiFile): Boolean =
+    psiFile.viewProvider.virtualFile.fileType == PermifyFileType
 
   override fun createFormattingTask(req: AsyncFormattingRequest): FormattingTask = object : FormattingTask {
     override fun cancel(): Boolean = false
 
     override fun run() {
       try {
-        val codeStyleSettings = req.context.codeStyleSettings
-        val commonSettings = codeStyleSettings.getCommonSettings(PermifyLanguage)
-        val fileType = req.context.containingFile.viewProvider.virtualFile.fileType
-        val indentOptions = codeStyleSettings.getIndentOptions(fileType)
-
-        val formatted = PermifyFormatter.format(
-          req.documentText, PermifyFormatterOptions(
-            useTabCharacter = indentOptions.USE_TAB_CHARACTER,
-            indentSize = indentOptions.INDENT_SIZE,
-            maxBlankLines = commonSettings.KEEP_BLANK_LINES_IN_CODE,
-            spaceAroundOperators = commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS,
-            spaceAroundBraces = !commonSettings.SPACE_WITHIN_BRACES // inverted: our flag means "strip spaces", theirs means "keep spaces"
-          )
-        )
+        val options = PermifyFormatterOptions.from(req.context.codeStyleSettings)
+        val formatted = PermifyFormatter.format(req.documentText, options)
         req.onTextReady(formatted)
       } catch (e: Exception) {
         req.onError("Formatting failed", e.message ?: "Unknown error")
