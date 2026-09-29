@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 fun properties(key: String) = providers.gradleProperty(key).get()
 
@@ -43,8 +44,10 @@ repositories {
 
 dependencies {
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+  testImplementation("junit:junit:4.13.2")
 
   intellijPlatform {
+    testFramework(TestFrameworkType.Platform)
     intellijIdeaUltimate(platformVersion) {
       useInstaller = false
     }
