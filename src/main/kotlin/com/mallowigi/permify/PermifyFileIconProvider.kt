@@ -6,8 +6,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import javax.swing.Icon
 
 class PermifyFileIconProvider : FileIconProvider {
+  fun isPermifyFile(file: VirtualFile): Boolean = file.extension in setOf("perm", "permify")
+
   override fun getIcon(file: VirtualFile, flags: Int, project: Project?): Icon? = when {
     isPermifyFile(file) -> PermifyIcons.PERMIFY_FILE
-    else                -> null
+    else -> null
   }
 }

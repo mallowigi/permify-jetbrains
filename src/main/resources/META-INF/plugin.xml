@@ -42,9 +42,12 @@
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
 
-        <formattingService implementation="com.mallowigi.permify.PermifyFormattingService"/>
+        <formattingService implementation="com.mallowigi.permify.formatter.PermifyFormattingService"/>
 
-        <langCodeStyleSettingsProvider implementation="com.mallowigi.permify.PermifyLanguageCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="com.mallowigi.permify.formatter.PermifyLanguageCodeStyleSettingsProvider"/>
+
+        <treeStructureProvider implementation="com.mallowigi.permify.PermifyTreeStructureProvider"/>
 
     </extensions>
 </idea-plugin>

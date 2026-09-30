@@ -1,12 +1,11 @@
-package com.mallowigi.permify
+package com.mallowigi.permify.formatter
 
 import com.intellij.formatting.service.AsyncDocumentFormattingService
 import com.intellij.formatting.service.AsyncFormattingRequest
 import com.intellij.formatting.service.FormattingService
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiFile
-import com.mallowigi.permify.formatter.PermifyFormatter
-import com.mallowigi.permify.formatter.PermifyFormatterOptions
+import com.mallowigi.permify.PermifyFileType
 
 class PermifyFormattingService : AsyncDocumentFormattingService() {
   override fun getFeatures(): Set<FormattingService.Feature?> =

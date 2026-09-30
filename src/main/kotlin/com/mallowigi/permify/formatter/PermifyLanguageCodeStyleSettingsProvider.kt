@@ -1,8 +1,9 @@
-package com.mallowigi.permify
+package com.mallowigi.permify.formatter
 
 import com.intellij.application.options.*
 import com.intellij.lang.Language
 import com.intellij.psi.codeStyle.*
+import com.mallowigi.permify.PermifyLanguage
 
 class PermifyLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
   override fun getLanguage(): Language = PermifyLanguage
