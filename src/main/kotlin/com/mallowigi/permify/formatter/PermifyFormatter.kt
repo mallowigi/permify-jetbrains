@@ -7,10 +7,10 @@ import com.mallowigi.permify.highlighter.PermifyHighlightingLexer
 
 data class PermifyFormatterOptions(
   val useTabCharacter: Boolean = false,
-  val indentSize: Int = 2,
+  val indentSize: Int = 4,
   val maxBlankLines: Int = 1,
   val spaceAroundOperators: Boolean = true,
-  val spaceAroundBraces: Boolean = true
+  val spaceBeforeBraces: Boolean = true
 ) {
   companion object {
     /** Builds options from the real IntelliJ Code Style settings for [PermifyLanguage]. */
@@ -22,7 +22,7 @@ data class PermifyFormatterOptions(
         indentSize = indentOptions.INDENT_SIZE,
         maxBlankLines = commonSettings.KEEP_BLANK_LINES_IN_CODE,
         spaceAroundOperators = commonSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS,
-        spaceAroundBraces = !commonSettings.SPACE_WITHIN_BRACES
+        spaceBeforeBraces = commonSettings.SPACE_BEFORE_DO_LBRACE
       )
     }
   }
@@ -117,13 +117,17 @@ object PermifyFormatter {
     result = result.replace(Regex("\n{3,}"), "\n".repeat(options.maxBlankLines + 1))
 
     // Add spaces before braces
-    if (options.spaceAroundBraces) {
+    if (options.spaceBeforeBraces) {
       result = result.replace(Regex("[ \t]*([{}])[ \t]*"), " $1 ")
+    } else {
+      result = result.replace(Regex("[ \t]*([{}])[ \t]*"), "$1")
     }
 
     // Add spaces between operators
     if (options.spaceAroundOperators) {
       result = result.replace(Regex("[ \t]*([=<>!&|]+)[ \t]*"), " $1 ")
+    } else {
+      result = result.replace(Regex("[ \t]*([=<>!&|]+)[ \t]*"), "$1")
     }
 
 
