@@ -47,6 +47,8 @@
         <langCodeStyleSettingsProvider
                 implementation="com.mallowigi.permify.formatter.PermifyLanguageCodeStyleSettingsProvider"/>
 
+        <lang.commenter language="permify" implementationClass="com.mallowigi.permify.commenter.PermifyCommenter"/>
+
         <!--<treeStructureProvider implementation="com.mallowigi.permify.treeStructure.PermifyTreeStructureProvider"/>-->
 
     </extensions>
