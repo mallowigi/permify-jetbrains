@@ -47,7 +47,7 @@
         <langCodeStyleSettingsProvider
                 implementation="com.mallowigi.permify.formatter.PermifyLanguageCodeStyleSettingsProvider"/>
 
-        <treeStructureProvider implementation="com.mallowigi.permify.PermifyTreeStructureProvider"/>
+        <!--<treeStructureProvider implementation="com.mallowigi.permify.treeStructure.PermifyTreeStructureProvider"/>-->
 
     </extensions>
 </idea-plugin>
