@@ -1,0 +1,52 @@
+{
+	parserClass="com.mallowigi.permify.lang.parser.PermifyParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+	psiClassPrefix="Permify"
+	psiImplClassSuffix="Impl"
+	psiPackage="com.mallowigi.permify.lang.psi"
+	psiImplPackage="com.mallowigi.permify.lang.psi.impl"
+
+	elementTypeHolderClass="com.mallowigi.permify.lang.psi.PermifyTypes"
+	psiImplUtilClass="com.mallowigi.permify.lang.psi.PermifyPsiImplUtil"
+
+	tokens=[
+		ENTITY='entity'
+		RELATION='relation'
+		PERMISSION='permission'
+		ATTRIBUTE='attribute'
+		ACTION='action'
+		RULE='rule'
+		AND='and'
+		OR='or'
+		NOT='not'
+		IN='in'
+
+		TYPE_BOOLEAN='boolean'
+		TYPE_STRING='string'
+		TYPE_INTEGER='integer'
+		TYPE_DOUBLE='double'
+
+		LPAREN='('
+		RPAREN=')'
+		LBRACE='{'
+		RBRACE='}'
+		LBRACKET='['
+		RBRACKET=']'
+		COMMA=','
+		SEMICOLON=';'
+		DOT='.'
+		EQ='='
+		AT='@'
+		HASH='#'
+
+		NUMBER='NUMBER'
+		STRING='STRING'
+		IDENTIFIER='IDENTIFIER'
+
+		LINE_COMMENT='LINE_COMMENT'
+		BLOCK_COMMENT='BLOCK_COMMENT'
+
+		RULE_BODY_CONTENT='RULE_BODY_CONTENT'
+	]
+}
