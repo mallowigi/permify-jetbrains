@@ -27,34 +27,38 @@ class PermifyAnnotator : PsiElementVisitor(), Annotator {
 
   override fun visitElement(element: PsiElement) {
     assert(myHolder != null)
-    val kind = getKeywordKind(element) ?: return
+    val kind = getIdentifierKind(element) ?: return
 
-    when {
-      else -> {
-        val textRange = element.textRange
-        val range = TextRange(textRange.startOffset, textRange.endOffset)
-        val highlightSeverity = HighlightSeverity.INFORMATION
+    val textRange = element.textRange
+    val range = TextRange(textRange.startOffset, textRange.endOffset)
+    val highlightSeverity = HighlightSeverity.INFORMATION
 
-        (myHolder ?: return).newSilentAnnotation(highlightSeverity)
-          .range(range)
-          .textAttributes(kind)
-          .create()
-      }
-    }
+    (myHolder ?: return).newSilentAnnotation(highlightSeverity)
+      .range(range)
+      .textAttributes(kind)
+      .create()
   }
 
-  private fun getKeywordKind(element: PsiElement): TextAttributesKey? = when (element.elementType) {
-    PermifyTypes.IDENTIFIER -> getIdentifier(element)
+  private fun getIdentifierKind(element: PsiElement): TextAttributesKey? = when (element.elementType) {
+    PermifyTypes.IDENTIFIER -> getParentRelatedKind(element)
     else -> null
   }
 
-  private fun getIdentifier(element: PsiElement): TextAttributesKey? = when (element.parent.elementType) {
+  private fun getParentRelatedKind(element: PsiElement): TextAttributesKey? = when (element.parent.elementType) {
     PermifyTypes.ENTITY_DEF -> PERMIFY_ENTITY_NAME
     PermifyTypes.RELATION_DEF -> PERMIFY_RELATION_NAME
     PermifyTypes.PERMISSION_DEF -> PERMIFY_PERMISSION_NAME
     PermifyTypes.ACTION_DEF -> PERMIFY_ACTION_NAME
     PermifyTypes.ATTRIBUTE_DEF -> PERMIFY_ATTRIBUTE_NAME
     PermifyTypes.RULE_DEF -> PERMIFY_RULE_NAME
+    PermifyTypes.RULE_PARAM -> PERMIFY_PARAMETER
+    else -> getSiblingRelatedKind(element)
+  }
+
+  private fun getSiblingRelatedKind(element: PsiElement): TextAttributesKey? = when (element.prevSibling?.elementType) {
+    PermifyTypes.AT -> PERMIFY_REFERENCE
+    PermifyTypes.HASH -> PERMIFY_ATTRIBUTE
+    PermifyTypes.DOT -> PERMIFY_EXTENSION
     else -> null
   }
 }
