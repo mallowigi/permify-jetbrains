@@ -11,12 +11,13 @@ class PermifySyntaxHighlighter : SyntaxHighlighterBase() {
   override fun getHighlightingLexer(): Lexer = PermifyLexer()
 
   override fun getTokenHighlights(tokenType: IElementType?): Array<out TextAttributesKey?> = when (tokenType) {
-    PermifyTypes.ENTITY,
-    PermifyTypes.RELATION,
-    PermifyTypes.PERMISSION,
-    PermifyTypes.ACTION,
-    PermifyTypes.ATTRIBUTE,
-    PermifyTypes.RULE,
+    PermifyTypes.ENTITY -> pack(PERMIFY_ENTITY)
+    PermifyTypes.RELATION -> pack(PERMIFY_RELATION)
+    PermifyTypes.PERMISSION -> pack(PERMIFY_PERMISSION)
+    PermifyTypes.ACTION -> pack(PERMIFY_ACTION)
+    PermifyTypes.ATTRIBUTE -> pack(PERMIFY_ATTRIBUTE_KEYWORD)
+    PermifyTypes.RULE -> pack(PERMIFY_RULE)
+
     PermifyTypes.AND,
     PermifyTypes.OR,
     PermifyTypes.NOT,
