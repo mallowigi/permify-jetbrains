@@ -50,3 +50,63 @@
 		RULE_BODY_CONTENT='RULE_BODY_CONTENT'
 	]
 }
+
+root ::= top_level_item*
+
+private top_level_item ::= entity_def | rule_def
+
+// Entity Definition
+// entity user { ... }
+entity_def ::= ENTITY IDENTIFIER LBRACE entity_body* RBRACE {pin=1}
+
+private entity_body ::= relation_def | attribute_def | permission_def | action_def | rule_def
+
+// Relation Definition
+// relation administrator @user
+relation_def ::= RELATION IDENTIFIER subject_ref+ {pin=1}
+
+// Subject Definition
+// @user#member
+subject_ref ::= AT IDENTIFIER (HASH IDENTIFIER)? {pin=1}
+
+// Attribute Definition
+// attribute is_active boolean
+attribute_def ::= ATTRIBUTE IDENTIFIER type {pin=1}
+
+// Attribute Type
+// boolean, string, integer, double, or array of these types
+type ::= (TYPE_BOOLEAN | TYPE_STRING | TYPE_INTEGER | TYPE_DOUBLE) (LBRACKET RBRACKET)? {pin=1}
+
+// Permission Definition
+// permission edit = action or permission
+permission_def ::= PERMISSION IDENTIFIER EQ expr {pin=1}
+
+// Action Definition
+// action edit = permission or action
+action_def ::= ACTION IDENTIFIER EQ expr {pin=1}
+
+// Rule Definition
+// rule is_admin(param integer) { ... }
+rule_def ::= RULE IDENTIFIER LPAREN param_list? RPAREN LBRACE rule_body RBRACE {pin=1}
+
+// Parameters
+// param1: type, param2: type, ...
+param_list ::= rule_param (COMMA rule_param)*
+rule_param ::= IDENTIFIER type {pin=1}
+
+// Rule body
+rule_body ::= RULE_BODY_CONTENT*
+
+// Expression handling (after the = )
+// First we support the (and/or/not) inline operators
+expr ::= primary_expr (and_or_not primary_expr)*
+private and_or_not ::= (AND | OR | NOT)
+
+// Primary Expression
+// Supports for nested identifiers (e.g., user.name.first)
+// and rule calls (e.g., is_admin(user))
+primary_expr ::= rule_call | paren_expr | member_expr
+
+rule_call ::= IDENTIFIER LPAREN (expr (COMMA expr)*)? RPAREN {pin=2}
+paren_expr ::= LPAREN expr RPAREN {pin=1}
+member_expr ::= IDENTIFIER (DOT IDENTIFIER)*
