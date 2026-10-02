@@ -1,0 +1,9 @@
+entity account {
+    attribute balance integer
+
+    rule check_balance(balance integer) {
+        balance > 5000
+    }
+
+    permission withdraw = check_balance(balance)
+}

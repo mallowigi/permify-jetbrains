@@ -1,0 +1,15 @@
+entity user {}
+
+entity organization {
+    relation admin @user
+    relation member @user
+}
+
+entity document {
+    relation owner @user
+    relation parent @organization
+
+    action edit = owner or parent.admin
+    action view = edit or parent.member
+    permission access = (view and not edit) or owner
+}

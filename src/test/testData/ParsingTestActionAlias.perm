@@ -1,0 +1,6 @@
+entity document {
+    relation owner @user
+
+    action edit = owner
+    permission view = edit or owner
+}

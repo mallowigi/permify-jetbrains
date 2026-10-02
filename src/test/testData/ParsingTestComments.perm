@@ -1,0 +1,9 @@
+// Schema with both comment styles
+entity user {}
+
+/*
+ * A document owned by a single user.
+ */
+entity document {
+    relation owner @user // direct owner reference
+}

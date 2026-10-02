@@ -1,0 +1,7 @@
+entity organization {
+    relation member @user
+}
+
+entity document {
+    relation viewer @user @organization#member
+}
