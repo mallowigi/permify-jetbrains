@@ -83,17 +83,19 @@ BLOCK_COMMENT="/*"~"*/"
 	{WHITE_SPACE} { return WHITE_SPACE; }
 	{LINE_COMMENT} { return LINE_COMMENT; }
 	{BLOCK_COMMENT} { return BLOCK_COMMENT; }
+
+  // Types for the rules (must come before {IDENTIFIER}: same-length ties break by
+  // declaration order, so the keyword rule has to win over the generic identifier rule)
+  "boolean" { return TYPE_BOOLEAN; }
+  "string" { return TYPE_STRING; }
+  "integer" { return TYPE_INTEGER; }
+  "double" { return TYPE_DOUBLE; }
+
   {IDENTIFIER} { return IDENTIFIER; }
 
   "," { return COMMA; }
   "[" { return LBRACKET; }
   "]" { return RBRACKET; }
-
-  // Types for the rules
-  "boolean" { return TYPE_BOOLEAN; }
-  "string" { return TYPE_STRING; }
-  "integer" { return TYPE_INTEGER; }
-  "double" { return TYPE_DOUBLE; }
 
   "(" { return LPAREN; }
 

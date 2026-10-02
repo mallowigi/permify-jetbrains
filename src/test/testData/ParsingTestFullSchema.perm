@@ -11,5 +11,5 @@ entity document {
 
     action edit = owner or parent.admin
     action view = edit or parent.member
-    permission access = (view and not edit) or owner
+    permission access = (view not edit) or owner
 }
