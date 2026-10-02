@@ -1,0 +1,129 @@
+// Schema version 08/02/2026
+entity user {  }
+entity bridge_user {  }
+entity predefined_role {
+    relation member @user
+}
+
+entity application {
+    relation no_access @user @predefined_role#member
+}
+
+entity bridge {
+    relation super_administrator @bridge_user
+
+    // customer section roles
+    relation section_administrator @bridge_user
+    relation section_viewer @bridge_user
+    relation section_viewer_limited @bridge_user
+
+    // bridge functional roles
+    relation feature_flags_manager @bridge_user
+    relation script_rollout_manager @bridge_user
+    relation access_control_manager @bridge_user
+    relation geolocation_manager @bridge_user
+    relation customer_feature_flags_manager @bridge_user
+
+    //  admin
+    action admin = super_administrator or access_control_manager or section_administrator
+
+    // feature_flags_actions
+    action manage_feature_flags = super_administrator or feature_flags_manager
+    action create_feature_flag = manage_feature_flags
+    action delete_feature_flag = manage_feature_flags
+    action edit_feature_flag_description = manage_feature_flags
+    action edit_feature_flag_default_state = manage_feature_flags
+
+    // permissions
+    action manage_permissions = super_administrator or access_control_manager
+    action set_acm_role = super_administrator
+
+    // script rollout actions
+    action rollout_script_version = super_administrator or script_rollout_manager
+
+    // geolocation actions
+    action manage_geolocations = super_administrator or geolocation_manager
+
+    // customer Feature Flag actions; independent of feature_flags_manager
+    action manage_customer_feature_flags = super_administrator or customer_feature_flags_manager
+
+    permission section_full_access = section_administrator or admin
+    permission section_create_drafts = section_full_access or section_viewer
+
+    permission section_create_drafts_limited = section_create_drafts or section_viewer_limited
+}
+
+entity test {
+    relation member @bridge_user
+}
+
+entity account {
+    relation bridge @bridge
+    relation type @test
+
+    relation viewer @bridge_user
+    relation administrator @bridge_user
+
+    permission admin = type.member or bridge.section_full_access or administrator
+    permission edit = admin
+    permission section_create_drafts_limited = bridge.section_create_drafts_limited and viewer
+    permission view = admin or edit or viewer or bridge.section_create_drafts or section_create_drafts_limited
+    permission access = view
+
+    action deactivate = bridge.admin
+
+    action set_feature_flag = view
+}
+
+entity test_section {  }
+entity customer_section {  }
+
+entity section {
+    relation parent_account @account
+
+    relation administrator @user @predefined_role#member
+    relation editor @user @predefined_role#member
+    relation viewer @user @predefined_role#member
+    relation no_access @user @predefined_role#member
+
+    relation code_editor @user @predefined_role#member
+    relation code_viewer @user @predefined_role#member
+    relation code_blocked @user @predefined_role#member
+
+    relation type @test_section @customer_section
+
+    action admin = parent_account.admin or administrator
+    action edit = admin or editor
+    action view = edit or parent_account.view or viewer
+    permission access = view
+
+    action edit_code = code_editor or parent_account.admin
+
+    action view_code = edit_code or code_viewer or parent_account.view
+
+    action view_general_settings_product_performance = admin or parent_account.view
+
+    action edit_general_settings_product_performance = admin
+
+    action view_general_settings_daily_activity_stream = admin or parent_account.view
+    action edit_general_settings_daily_activity_stream = admin
+    action edit_affinity_weights = admin
+    action edit_recommendations_top_score = admin
+    action edit_feed_affinities = admin
+    action edit_sensitive_properties = admin
+    action add_datafeed_properties = admin or parent_account.view
+    action remove_datafeed_properties = admin
+    action view_data_privacy = admin or parent_account.view
+    action delete_data_privacy_user_data = admin
+    action export_data_privacy_user_data = admin
+    action create_experience_email_campaign = edit or parent_account.view
+    action edit_experience_email_campaign = edit or parent_account.view
+    action generate_experience_email_embed_code = edit
+    action edit_primary_audiences = edit or parent_account.view
+    action edit_evaluator = edit
+    action edit_advanced_settings = admin
+    action edit_context_rules = admin
+    action edit_ip_filters = admin
+    action edit_primary_metrics = admin
+    action edit_user_identifiers = admin
+}

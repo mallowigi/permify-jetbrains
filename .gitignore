@@ -43,3 +43,8 @@ bin/
 .intellijPlatform
 
 .kotlin/sessions
+
+### Grammar-Kit / JFlex ###
+# IDE-generated tool artifacts (skeleton + bundled jar), not generated source
+src/main/gen/idea-flex.skeleton
+src/main/gen/jflex-*.jar

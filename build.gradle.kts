@@ -64,6 +64,8 @@ dependencies {
   }
 }
 
+// Grammar Kit
+sourceSets["main"].java.srcDirs("src/main/gen")
 
 kotlin {
   jvmToolchain(javaVersion.toInt())
