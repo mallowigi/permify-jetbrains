@@ -5,6 +5,7 @@ import com.intellij.ide.structureView.*
 import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.editor.Editor
+import com.intellij.pom.Navigatable
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
@@ -83,5 +84,13 @@ class PermifyStructureViewFactory : PsiStructureViewFactory {
 
       else -> emptyArray()
     }
+
+    override fun navigate(requestFocus: Boolean) {
+      (element as? Navigatable)?.navigate(requestFocus)
+    }
+
+    override fun canNavigate(): Boolean = true
+
+    override fun canNavigateToSource(): Boolean = true
   }
 }

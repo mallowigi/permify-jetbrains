@@ -97,14 +97,12 @@ entity section {
     action view = edit or parent_account.view or viewer
     permission access = view
 
+		attribute is_employee boolean
+
     action edit_code = code_editor or parent_account.admin
-
     action view_code = edit_code or code_viewer or parent_account.view
-
     action view_general_settings_product_performance = admin or parent_account.view
-
     action edit_general_settings_product_performance = admin
-
     action view_general_settings_daily_activity_stream = admin or parent_account.view
     action edit_general_settings_daily_activity_stream = admin
     action edit_affinity_weights = admin
