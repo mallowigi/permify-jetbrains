@@ -37,6 +37,10 @@
                   implementationClass="com.mallowigi.permify.PermifyFileType"
                   extensions="perm"/>
 
+        <lang.parserDefinition
+                language="permify"
+                implementationClass="com.mallowigi.permify.lang.PermifyParserDefinition"/>
+
         <editorHighlighterProvider filetype="permify"
                                    implementationClass="com.mallowigi.permify.highlighter.PermifyEditorHighlighterProvider"/>
 

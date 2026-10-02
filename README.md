@@ -35,10 +35,28 @@ Also, please create an `.editorconfig` file if you didn't already do so. This wi
 
 - [ ] Color Scheme
 - [ ] File Templates
-- [ ] Convert to a first-party language
+- [x] Convert to a first-party language (lexer + grammar + PSI wiring; see below)
 - [ ] LSP Support
 - [ ] Error Highlighting
 - [ ] Tool Window for visualizing the permissions
+
+### First-party language support progress
+
+The plugin now has a real IntelliJ `Lexer`/`PsiParser`/PSI tree for `.perm` files
+(JFlex lexer + Grammar-Kit BNF grammar, generated sources committed under
+`src/main/gen`), in addition to the existing TextMate-based syntax highlighting and
+text-based formatter (both left untouched — they don't depend on PSI). This unlocks
+future IDE features that need a real syntax tree. Still open:
+
+- [ ] CEL-aware parsing of `rule { ... }` bodies (currently captured as one opaque,
+      brace-balanced token; the expression inside is Google CEL, not Permify's own
+      grammar)
+- [ ] References/go-to-definition and rename for `@EntityType`/`#relation` subject
+      references and permission/action/rule call targets
+- [ ] Inspections (e.g. restricting rule-call arguments to bare identifiers, matching
+      Permify's own parser, currently accepted permissively by the grammar)
+- [ ] Structure view based on the PSI tree
+- [ ] Migrating the text-based formatter to a PSI-based `FormattingModelBuilder`
 
 ## Credits
 

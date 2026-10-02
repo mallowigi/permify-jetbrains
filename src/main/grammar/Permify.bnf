@@ -8,6 +8,8 @@
 	psiImplPackage="com.mallowigi.permify.lang.psi.impl"
 
 	elementTypeHolderClass="com.mallowigi.permify.lang.psi.PermifyTypes"
+	elementTypeClass="com.mallowigi.permify.lang.psi.PermifyElementType"
+	tokenTypeClass="com.mallowigi.permify.lang.psi.PermifyTokenType"
 	psiImplUtilClass="com.mallowigi.permify.lang.psi.PermifyPsiImplUtil"
 
 	tokens=[
