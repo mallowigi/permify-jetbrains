@@ -41,8 +41,8 @@
                 language="permify"
                 implementationClass="com.mallowigi.permify.lang.PermifyParserDefinition"/>
 
-        <editorHighlighterProvider filetype="permify"
-                                   implementationClass="com.mallowigi.permify.highlighter.PermifyEditorHighlighterProvider"/>
+        <lang.syntaxHighlighterFactory language="permify"
+                                       implementationClass="com.mallowigi.permify.highlighter.PermifySyntaxHighlighterFactory"/>
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
 
@@ -52,6 +52,7 @@
                 implementation="com.mallowigi.permify.formatter.PermifyLanguageCodeStyleSettingsProvider"/>
 
         <lang.commenter language="permify" implementationClass="com.mallowigi.permify.commenter.PermifyCommenter"/>
+        <lang.braceMatcher language="permify" implementationClass="com.mallowigi.permify.lang.PermifyBraceMatcher"/>
 
         <!--<treeStructureProvider implementation="com.mallowigi.permify.treeStructure.PermifyTreeStructureProvider"/>-->
 

@@ -6,14 +6,14 @@ import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 import com.intellij.openapi.util.NlsContexts
-import com.mallowigi.permify.highlighter.PermifyHighlighterFactory
+import com.mallowigi.permify.lang.PermifySyntaxHighlighter
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
 class PermifyColorSettings : ColorSettingsPage {
   override fun getIcon(): Icon? = null
 
-  override fun getHighlighter(): SyntaxHighlighter = PermifyHighlighterFactory().getSyntaxHighlighter(null, null)
+  override fun getHighlighter(): SyntaxHighlighter = PermifySyntaxHighlighter()
 
   override fun getDemoText(): @NonNls String =
     """<entity>entity</entity> <entity_name>user</entity_name> <operator>{</operator><operator>}</operator>
