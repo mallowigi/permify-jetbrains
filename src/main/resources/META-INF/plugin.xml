@@ -45,6 +45,8 @@
                                        implementationClass="com.mallowigi.permify.highlighter.PermifySyntaxHighlighterFactory"/>
         <lang.commenter language="permify" implementationClass="com.mallowigi.permify.commenter.PermifyCommenter"/>
         <lang.braceMatcher language="permify" implementationClass="com.mallowigi.permify.lang.PermifyBraceMatcher"/>
+        <lang.psiStructureViewFactory language="permify"
+                                      implementationClass="com.mallowigi.permify.lang.PermifyStructureViewFactory"/>
         <annotator language="permify" implementationClass="com.mallowigi.permify.annotator.PermifyAnnotator"/>
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
