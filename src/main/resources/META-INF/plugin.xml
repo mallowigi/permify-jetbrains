@@ -40,6 +40,7 @@
         <lang.parserDefinition
                 language="permify"
                 implementationClass="com.mallowigi.permify.lang.PermifyParserDefinition"/>
+        <lang.ast.factory language="permify" implementationClass="com.mallowigi.permify.lang.PermifyASTFactory"/>
 
         <lang.syntaxHighlighterFactory language="permify"
                                        implementationClass="com.mallowigi.permify.highlighter.PermifySyntaxHighlighterFactory"/>

@@ -2,11 +2,14 @@ package com.mallowigi.permify.reference
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.lang.LanguageASTFactory
 import com.intellij.psi.PsiReferenceContributor
 import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.psi.tree.IElementType
 import com.intellij.testFramework.ParsingTestCase
 import com.intellij.util.KeyedLazyInstance
+import com.mallowigi.permify.PermifyLanguage
+import com.mallowigi.permify.lang.PermifyASTFactory
 import com.mallowigi.permify.lang.PermifyParserDefinition
 import com.mallowigi.permify.lang.psi.PermifyTypes
 
@@ -33,6 +36,9 @@ class PermifyReferenceContributorTest : ParsingTestCase("", "perm", PermifyParse
         override fun getInstance(): PsiReferenceContributor = PermifyReferenceContributor()
       }
     )
+    // Without this, IDENTIFIER leaves are plain LeafPsiElements and never consult
+    // ReferenceProvidersRegistry - see PermifyIdentifierElement/PermifyASTFactory.
+    addExplicitExtension(LanguageASTFactory.INSTANCE, PermifyLanguage, PermifyASTFactory())
   }
 
   fun testSubjectRefEntityReference() {
