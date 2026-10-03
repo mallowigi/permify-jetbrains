@@ -66,6 +66,8 @@
         <langCodeStyleSettingsProvider
                 implementation="com.mallowigi.permify.formatter.PermifyLanguageCodeStyleSettingsProvider"/>
 
+        <completion.contributor language="permify"
+                                implementationClass="com.mallowigi.permify.completion.PermifyCompletionContributor"/>
 
         <!--<treeStructureProvider implementation="com.mallowigi.permify.treeStructure.PermifyTreeStructureProvider"/>-->
 
