@@ -55,6 +55,9 @@
                                   implementation="com.mallowigi.permify.reference.PermifyReferenceContributor"/>
         <lang.findUsagesProvider language="permify"
                                  implementationClass="com.mallowigi.permify.lang.PermifyFindUsagesProvider"/>
+        <lang.refactoringSupport language="permify"
+                                 implementationClass="com.mallowigi.permify.refactoring.PermifyRefactoringSupport"/>
+        <refactoring.safeDeleteProcessor implementation="com.mallowigi.permify.refactoring.PermifySafeDeleteProcessor"/>
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
 
