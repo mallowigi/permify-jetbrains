@@ -27,6 +27,8 @@ class PermifyAnnotator : PsiElementVisitor(), Annotator {
 
   override fun visitElement(element: PsiElement) {
     assert(myHolder != null)
+
+    if (element.elementType == PermifyTypes.IDENTIFIER) checkUnresolvedReference(element)
     val kind = getIdentifierKind(element) ?: return
 
     val textRange = element.textRange
@@ -37,6 +39,18 @@ class PermifyAnnotator : PsiElementVisitor(), Annotator {
       .range(range)
       .textAttributes(kind)
       .create()
+  }
+
+  private fun checkUnresolvedReference(element: PsiElement) {
+    val references = element.references
+    if (references.isEmpty()) return
+
+    if (references.none { it.resolve() != null }) {
+      (myHolder ?: return)
+        .newAnnotation(HighlightSeverity.ERROR, "Unresolved reference: '${element.text}'")
+        .range(element.textRange)
+        .create()
+    }
   }
 
   private fun getIdentifierKind(element: PsiElement): TextAttributesKey? = when (element.elementType) {
