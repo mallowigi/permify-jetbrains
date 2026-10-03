@@ -5,16 +5,20 @@ This plugin adds basic support for the **Permify authorization language** to Jet
 [Permify](https://permify.co/) is a set of tools based on a domain-specific language that allows developers to define and enforce
 authorization rules in their applications. Inspired by Google Zanzibar.
 
-This plugin provides syntax highlighting and code completion for the _Permify Domain Specific Language (DSL)_ through
-the [TextMate Bundles](https://plugins.jetbrains.com/plugin/7221-textmate-bundles) plugin.
+This plugin provides syntax highlighting, scope-aware code completion, and PSI-based
+code intelligence (go to declaration, Find Usages, rename, structure view) for the
+_Permify Domain Specific Language (DSL)_.
 
 ## Features
 
 - Syntax highlighting
-- Basic code completion
+- Scope-aware code completion (keywords + reference-based)
 - Automatic indentation
 - Simple commenting
 - Bracket matching
+- Go to Declaration, Find Usages, Rename, Safe Delete
+- Unresolved reference highlighting
+- Structure view
 
 ## Installation
 
@@ -44,18 +48,30 @@ Also, please create an `.editorconfig` file if you didn't already do so. This wi
 
 The plugin now has a real IntelliJ `Lexer`/`PsiParser`/PSI tree for `.perm` files
 (JFlex lexer + Grammar-Kit BNF grammar, generated sources committed under
-`src/main/gen`), in addition to the existing TextMate-based syntax highlighting and
-text-based formatter (both left untouched — they don't depend on PSI). This unlocks
-future IDE features that need a real syntax tree. Still open:
+`src/main/gen`), in addition to the existing TextMate-based syntax highlighting (now
+driven by the real PSI lexer via `lang.syntaxHighlighterFactory`) and text-based
+formatter. On top of that PSI tree, the plugin now supports:
+
+- References/go-to-declaration, Find Usages, Rename, and Safe Delete for
+  `@EntityType`/`#relation` subject references, rule-call targets, and
+  permission/action/rule expression operands (file-local resolution only - Permify has
+  no import/namespace mechanism)
+- Unresolved-reference error highlighting
+- A Structure View based on the PSI tree
+- Scope-aware keyword completion (`entity`/`rule` at the top level,
+  `relation`/`permission`/`attribute`/`action`/`rule` inside an entity body, type
+  keywords after an attribute/rule-param name, `and`/`or`/`not` after a complete
+  expression operand), alongside the existing reference-based completion
+
+Still open:
 
 - [ ] CEL-aware parsing of `rule { ... }` bodies (currently captured as one opaque,
       brace-balanced token; the expression inside is Google CEL, not Permify's own
       grammar)
-- [ ] References/go-to-definition and rename for `@EntityType`/`#relation` subject
-      references and permission/action/rule call targets
+- [ ] Chained dotted-segment resolution (e.g. the `admin` part of `parent.admin`) -
+      currently only the first segment of a dotted member expression resolves
 - [ ] Inspections (e.g. restricting rule-call arguments to bare identifiers, matching
       Permify's own parser, currently accepted permissively by the grammar)
-- [ ] Structure view based on the PSI tree
 - [ ] Migrating the text-based formatter to a PSI-based `FormattingModelBuilder`
 
 ## Credits

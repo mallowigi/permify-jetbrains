@@ -66,7 +66,7 @@ object PermifyCompletionContext {
    */
   fun isAttributeName(prev: PsiElement): Boolean = when {
     prev.elementType != PermifyTypes.IDENTIFIER -> false
-    prev.parent.elementType != PermifyTypes.ATTRIBUTE_DEF -> false
+    prev.parent?.elementType != PermifyTypes.ATTRIBUTE_DEF -> false
     else -> true
   }
 
@@ -76,7 +76,7 @@ object PermifyCompletionContext {
    */
   fun isRuleParam(prev: PsiElement): Boolean = when {
     prev.elementType != PermifyTypes.IDENTIFIER -> false
-    prev.parent.elementType != PermifyTypes.RULE_PARAM -> false
+    prev.parent?.elementType != PermifyTypes.RULE_PARAM -> false
     else -> true
   }
 
@@ -88,7 +88,7 @@ object PermifyCompletionContext {
     // Verify first that the previous token is the last token of a primary expression
     val primaryExpr = PsiTreeUtil.getParentOfType(prev, PermifyPrimaryExpr::class.java) ?: return false
 
-    if (primaryExpr.parent.elementType != PermifyTypes.EXPR) return false
+    if (primaryExpr.parent?.elementType != PermifyTypes.EXPR) return false
     return primaryExpr.textRange.endOffset == prev.textRange.endOffset
   }
 

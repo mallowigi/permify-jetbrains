@@ -11,11 +11,14 @@
         <h2>Features</h2>
         <ul>
             <li>Syntax Highlighting</li>
-            <li>Basic Code Completion</li>
+            <li>Scope-aware Code Completion (keywords + references)</li>
             <li>Automatic indentation (with editorConfig)</li>
             <li>Easy Commenting</li>
             <li>Bracket Matching</li>
             <li>Basic Snippets</li>
+            <li>Go to Declaration, Find Usages, Rename, Safe Delete</li>
+            <li>Unresolved Reference Highlighting</li>
+            <li>Structure View</li>
         </ul>
         ]]></description>
 
