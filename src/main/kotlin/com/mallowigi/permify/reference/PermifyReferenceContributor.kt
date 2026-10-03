@@ -72,7 +72,10 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findEntityByName(file, element.text)
     }
 
-    override fun getVariants(): Array<Any> = emptyArray()
+    override fun getVariants(): Array<PsiElement> {
+      val file = element.containingFile as PermifyFile
+      return PermifyPsiUtil.findAllEntities(file).filterNotNull().toTypedArray()
+    }
   }
 
   class PermifyRelationReference(element: PsiElement) :
@@ -86,7 +89,13 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findRelationByName(containingEntity.parent as PermifyEntityDef, element.text)
     }
 
-    override fun getVariants(): Array<Any> = emptyArray()
+    override fun getVariants(): Array<PsiElement> {
+      val entityName = element.prevSibling.prevSibling.text
+      val containingEntity =
+        PermifyPsiUtil.findEntityByName(element.containingFile as PermifyFile, entityName) ?: return emptyArray()
+
+      return PermifyPsiUtil.findAllRelations(containingEntity.parent as PermifyEntityDef).filterNotNull().toTypedArray()
+    }
   }
 
   class PermifyRuleReference(element: PsiElement) :
@@ -97,7 +106,11 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findRuleByName(file, enclosingEntityDef, element.text)
     }
 
-    override fun getVariants(): Array<Any> = emptyArray()
+    override fun getVariants(): Array<PsiElement> {
+      val enclosingEntityDef = element.parentOfType<PermifyEntityDef>()
+      val file = element.containingFile as PermifyFile
+      return PermifyPsiUtil.findAllRules(file, enclosingEntityDef).filterNotNull().toTypedArray()
+    }
   }
 
   class PermifyAttributeReference(element: PsiElement) :
@@ -107,7 +120,10 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
     }
 
-    override fun getVariants(): Array<Any> = emptyArray()
+    override fun getVariants(): Array<PsiElement> {
+      val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return emptyArray()
+      return PermifyPsiUtil.findAllDeclarations(containingEntity).filterNotNull().toTypedArray()
+    }
   }
 
   class PermifySelfReference(element: PsiElement) :
@@ -117,6 +133,9 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
     }
 
-    override fun getVariants(): Array<Any> = emptyArray()
+    override fun getVariants(): Array<PsiElement> {
+      val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return emptyArray()
+      return PermifyPsiUtil.findAllDeclarations(containingEntity).filterNotNull().toTypedArray()
+    }
   }
 }
