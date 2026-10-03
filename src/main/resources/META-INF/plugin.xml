@@ -53,6 +53,8 @@
         <annotator language="permify" implementationClass="com.mallowigi.permify.annotator.PermifyAnnotator"/>
         <psi.referenceContributor language="permify"
                                   implementation="com.mallowigi.permify.reference.PermifyReferenceContributor"/>
+        <lang.findUsagesProvider language="permify"
+                                 implementationClass="com.mallowigi.permify.lang.PermifyFindUsagesProvider"/>
 
         <colorSettingsPage implementation="com.mallowigi.permify.settings.PermifyColorSettings"/>
 
