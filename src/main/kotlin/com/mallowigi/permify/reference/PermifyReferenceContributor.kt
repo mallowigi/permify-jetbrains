@@ -1,5 +1,6 @@
 package com.mallowigi.permify.reference
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiTreeUtil
@@ -64,7 +65,7 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
     )
   }
 
-  class PermifyEntityReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+  class PermifyEntityReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
     override fun resolve(): PsiElement? {
       val file = element.containingFile as PermifyFile
       return PermifyPsiUtil.findEntityByName(file, element.text)
@@ -73,7 +74,7 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
     override fun getVariants(): Array<Any> = emptyArray()
   }
 
-  class PermifyRelationReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+  class PermifyRelationReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
     override fun resolve(): PsiElement? {
       // Get the sibling @user for @user#member
       val entityName = element.prevSibling.prevSibling.text
@@ -86,7 +87,7 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
     override fun getVariants(): Array<Any> = emptyArray()
   }
 
-  class PermifyRuleReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+  class PermifyRuleReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
     override fun resolve(): PsiElement? {
       val enclosingEntityDef = element.parentOfType<PermifyEntityDef>()
       val file = element.containingFile as PermifyFile
@@ -96,7 +97,7 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
     override fun getVariants(): Array<Any> = emptyArray()
   }
 
-  class PermifyAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+  class PermifyAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
     override fun resolve(): PsiElement? {
       val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return null
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
@@ -105,7 +106,7 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
     override fun getVariants(): Array<Any> = emptyArray()
   }
 
-  class PermifySelfReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+  class PermifySelfReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
     override fun resolve(): PsiElement? {
       val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return null
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
