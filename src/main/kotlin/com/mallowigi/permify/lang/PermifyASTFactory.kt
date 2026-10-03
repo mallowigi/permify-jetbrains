@@ -15,5 +15,8 @@ import com.mallowigi.permify.lang.psi.PermifyTypes
  */
 class PermifyASTFactory : ASTFactory() {
   override fun createLeaf(type: IElementType, text: CharSequence): LeafElement? =
-    if (type == PermifyTypes.IDENTIFIER) PermifyIdentifierElement(type, text) else null
+    when (type) {
+      PermifyTypes.IDENTIFIER -> PermifyIdentifierElement(type, text)
+      else -> null
+    }
 }

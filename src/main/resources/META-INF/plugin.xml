@@ -48,6 +48,8 @@
         <lang.braceMatcher language="permify" implementationClass="com.mallowigi.permify.lang.PermifyBraceMatcher"/>
         <lang.psiStructureViewFactory language="permify"
                                       implementationClass="com.mallowigi.permify.lang.PermifyStructureViewFactory"/>
+        <lang.elementManipulator forClass="com.mallowigi.permify.lang.psi.PermifyIdentifierElement"
+                                 implementationClass="com.mallowigi.permify.lang.PermifyElementManipulator"/>
         <annotator language="permify" implementationClass="com.mallowigi.permify.annotator.PermifyAnnotator"/>
         <psi.referenceContributor language="permify"
                                   implementation="com.mallowigi.permify.reference.PermifyReferenceContributor"/>
