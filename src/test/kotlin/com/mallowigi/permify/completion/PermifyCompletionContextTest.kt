@@ -16,11 +16,11 @@ class PermifyCompletionContextTest : ParsingTestCase("", "perm", PermifyParserDe
     PsiTreeUtil.findChildrenOfType(file, PsiElement::class.java)
       .first { it.firstChild == null && it.text == "DUMMY" }
 
-  private fun check(label: String, text: String, expected: PermifyCompletionContext.Kind) {
+  private fun check(label: String, text: String, vararg expected: PermifyCompletionContext.Kind) {
     val file = parseFile("test", text)
     val dummy = findDummy(file)
     val actual = PermifyCompletionContext.classify(dummy)
-    TestCase.assertEquals(label, expected, actual)
+    TestCase.assertEquals(label, expected.toSet(), actual)
   }
 
   fun testClassify() {
@@ -33,15 +33,26 @@ class PermifyCompletionContextTest : ParsingTestCase("", "perm", PermifyParserDe
       "entity user {\n  rule check(foo DUMMY) {\n    x\n  }\n}",
       PermifyCompletionContext.Kind.RULE_PARAM,
     )
+    // Ambiguous: entity's last body item before closing `}` — both EXPR and ENTITY_BODY apply.
     check(
-      "EXPR_OPERATOR_PERMISSION",
+      "EXPR_OPERATOR_PERMISSION_AT_ENTITY_END",
       "entity user {\n  relation owner @user\n  permission x = owner DUMMY\n}",
       PermifyCompletionContext.Kind.EXPR,
+      PermifyCompletionContext.Kind.ENTITY_BODY,
     )
+    // Same ambiguity, as reported: `action` instead of `permission`.
+    check(
+      "EXPR_OPERATOR_ACTION_AT_ENTITY_END",
+      "entity user2 {\n  relation foo @user\n  action foo = foo\n  DUMMY\n}",
+      PermifyCompletionContext.Kind.EXPR,
+      PermifyCompletionContext.Kind.ENTITY_BODY,
+    )
+    // Also ambiguous mid-paren: error recovery collapses the ancestor chain to the same offset.
     check(
       "EXPR_OPERATOR_PAREN",
       "entity user {\n  relation owner @user\n  relation admin @user\n  permission x = (owner DUMMY)\n}",
       PermifyCompletionContext.Kind.EXPR,
+      PermifyCompletionContext.Kind.ENTITY_BODY,
     )
     check(
       "ENTITY_BODY_AFTER_RELATION",

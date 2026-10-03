@@ -79,6 +79,19 @@ class PermifyKeywordCompletionTest : BasePlatformTestCase() {
     assertContainsElements(strings, "and", "or", "not")
   }
 
+  fun testExprOperatorAndEntityBodyBothOfferedAtEntityEnd() {
+    // Right after the entity's last body item's expression (before `}`), both kinds apply.
+    myFixture.configureByText(
+      "test.perm",
+      "entity user2 {\n  relation foo @user\n  action foo = foo\n  <caret>\n}",
+    )
+    val lookups = myFixture.completeBasic()
+    val strings = lookups?.mapNotNull { it.lookupString } ?: emptyList()
+
+    assertContainsElements(strings, "and", "or", "not")
+    assertContainsElements(strings, "relation", "permission", "attribute", "action", "rule")
+  }
+
   fun testNoKeywordNoiseInsideSubjectRef() {
     myFixture.configureByText("test.perm", "entity user {\n  relation owner @<caret>\n}")
     val lookups = myFixture.completeBasic()

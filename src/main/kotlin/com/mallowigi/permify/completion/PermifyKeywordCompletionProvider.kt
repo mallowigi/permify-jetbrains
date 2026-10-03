@@ -13,7 +13,7 @@ class PermifyKeywordCompletionProvider : CompletionProvider<CompletionParameters
     context: ProcessingContext,
     resultSet: CompletionResultSet,
   ) {
-    val keywords = keywordsFor(classify(parameters.position))
+    val keywords = classify(parameters.position).flatMap { keywordsFor(it) }.distinct()
     if (keywords.isEmpty()) return
 
     keywords.forEach { keyword -> resultSet.addElement(createLookupElement(keyword)) }

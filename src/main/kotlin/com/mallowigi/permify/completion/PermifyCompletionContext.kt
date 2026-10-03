@@ -33,20 +33,22 @@ object PermifyCompletionContext {
   )
 
   /**
-   * Classifies the element at the given position to a specific kind
+   * Classifies the element at the given position into the set of grammatically valid
+   * kinds (usually one, but `EXPR`/`ENTITY_BODY` can both apply - see `isEndOfPrimaryExpr`).
    */
-  fun classify(position: PsiElement): Kind {
-    val prevLeaf = previousLeaf(position)
+  fun classify(position: PsiElement): Set<Kind> {
+    val prevLeaf = previousLeaf(position) ?: return setOf(Kind.TOP_LEVEL)
 
-    return when {
-      prevLeaf == null -> Kind.TOP_LEVEL
-      isAttributeName(prevLeaf) -> Kind.ATTRIBUTE_TYPE
-      isRuleParam(prevLeaf) -> Kind.RULE_PARAM
-      isEndOfPrimaryExpr(prevLeaf) -> Kind.EXPR
-      isEndOfEntityBody(prevLeaf) -> Kind.ENTITY_BODY
-      isEndOfTopLevelItem(prevLeaf) -> Kind.TOP_LEVEL
-      else -> Kind.UNKNOWN
-    }
+    if (isAttributeName(prevLeaf)) return setOf(Kind.ATTRIBUTE_TYPE)
+    if (isRuleParam(prevLeaf)) return setOf(Kind.RULE_PARAM)
+
+    val kinds = mutableSetOf<Kind>()
+    if (isEndOfPrimaryExpr(prevLeaf)) kinds += Kind.EXPR
+    if (isEndOfEntityBody(prevLeaf)) kinds += Kind.ENTITY_BODY
+    if (kinds.isNotEmpty()) return kinds
+
+    if (isEndOfTopLevelItem(prevLeaf)) return setOf(Kind.TOP_LEVEL)
+    return setOf(Kind.UNKNOWN)
   }
 
   /**
