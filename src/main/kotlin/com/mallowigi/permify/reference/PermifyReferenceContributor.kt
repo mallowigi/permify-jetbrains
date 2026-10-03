@@ -2,13 +2,12 @@ package com.mallowigi.permify.reference
 
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import com.mallowigi.permify.file.PermifyFile
-import com.mallowigi.permify.lang.psi.PermifyEntityDef
-import com.mallowigi.permify.lang.psi.PermifyPsiUtil
-import com.mallowigi.permify.lang.psi.PermifyTypes
+import com.mallowigi.permify.lang.psi.*
 
 class PermifyReferenceContributor : PsiReferenceContributor() {
   override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -28,12 +27,39 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       }
     )
 
+    // Reference rule calls (e.g. check_ip_range(...))
     registrar.registerReferenceProvider(
       PlatformPatterns.psiElement(PermifyTypes.IDENTIFIER)
         .withParent(PlatformPatterns.psiElement(PermifyTypes.RULE_CALL)),
       object : PsiReferenceProvider() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<out PsiReference?> =
           arrayOf(PermifyRuleReference(element))
+      }
+    )
+
+    // Reference member expressions (e.g. `admin / admin.member[.blabla]`) or rule-call arguments (e.g. `check_ip_range(admin, ...)`)
+    registrar.registerReferenceProvider(
+      PlatformPatterns.psiElement(PermifyTypes.IDENTIFIER)
+        .withParent(PlatformPatterns.psiElement(PermifyTypes.MEMBER_EXPR)),
+      object : PsiReferenceProvider() {
+        override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<out PsiReference?> {
+          // Not the first segment of the dotted chain - out of scope for now
+          if (element.prevSibling != null) return PsiReference.EMPTY_ARRAY
+
+          // Walk up past any paren_expr/expr/primary_expr wrapper layers to find
+          // whether we're a rule-call argument or a plain permission/action operand
+          val enclosingContext = PsiTreeUtil.getParentOfType(
+            element,
+            PermifyRuleCall::class.java,
+            PermifyPermissionDef::class.java,
+            PermifyActionDef::class.java
+          )
+
+          return when (enclosingContext) {
+            is PermifyRuleCall -> arrayOf(PermifyAttributeReference(element))
+            else -> arrayOf(PermifySelfReference(element))
+          }
+        }
       }
     )
   }
@@ -65,6 +91,24 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       val enclosingEntityDef = element.parentOfType<PermifyEntityDef>()
       val file = element.containingFile as PermifyFile
       return PermifyPsiUtil.findRuleByName(file, enclosingEntityDef, element.text)
+    }
+
+    override fun getVariants(): Array<Any> = emptyArray()
+  }
+
+  class PermifyAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+    override fun resolve(): PsiElement? {
+      val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return null
+      return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
+    }
+
+    override fun getVariants(): Array<Any> = emptyArray()
+  }
+
+  class PermifySelfReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+    override fun resolve(): PsiElement? {
+      val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return null
+      return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
     }
 
     override fun getVariants(): Array<Any> = emptyArray()
