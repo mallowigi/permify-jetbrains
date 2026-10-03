@@ -1,6 +1,5 @@
 package com.mallowigi.permify.lang
 
-import com.intellij.icons.AllIcons
 import com.intellij.ide.structureView.*
 import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.navigation.ItemPresentation
@@ -10,6 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
 import com.mallowigi.permify.lang.psi.PermifyEntityDef
+import com.mallowigi.permify.lang.psi.PermifyPsiUtil
 import com.mallowigi.permify.lang.psi.PermifyTypes
 import javax.swing.Icon
 
@@ -40,16 +40,7 @@ class PermifyStructureViewFactory : PsiStructureViewFactory {
         else -> getDeclarationName(element)
       }
 
-      override fun getIcon(unused: Boolean): Icon = when (element.elementType) {
-        PermifyTypes.ENTITY_DEF -> AllIcons.Nodes.Class
-        PermifyTypes.RELATION_DEF -> AllIcons.Nodes.Related
-        PermifyTypes.PERMISSION_DEF -> AllIcons.Nodes.Padlock
-        PermifyTypes.ACTION_DEF -> AllIcons.Nodes.Method
-        PermifyTypes.ATTRIBUTE_DEF -> AllIcons.Nodes.Property
-        PermifyTypes.RULE_DEF -> AllIcons.Nodes.Function
-        PermifyTypes.PRIMARY_EXPR -> AllIcons.Nodes.Parameter
-        else -> AllIcons.Nodes.Unknown
-      }
+      override fun getIcon(unused: Boolean): Icon = PermifyPsiUtil.iconFor(element.elementType)
 
       /**
        * For entity/relation/etc we want to display the name of the declaration,

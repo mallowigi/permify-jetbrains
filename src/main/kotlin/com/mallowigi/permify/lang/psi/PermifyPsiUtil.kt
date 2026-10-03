@@ -1,8 +1,10 @@
 package com.mallowigi.permify.lang.psi
 
+import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.mallowigi.permify.file.PermifyFile
+import javax.swing.Icon
 
 object PermifyPsiUtil {
   val INTERNAL_ELEMENTS = listOf(
@@ -12,6 +14,18 @@ object PermifyPsiUtil {
     PermifyTypes.RELATION_DEF,
     PermifyTypes.RULE_DEF,
   )
+
+  /** Icon for a declaration's `_DEF` element type (or `RULE_PARAM` for rule parameters). */
+  fun iconFor(elementType: IElementType?): Icon = when (elementType) {
+    PermifyTypes.ENTITY_DEF -> AllIcons.Nodes.Class
+    PermifyTypes.RELATION_DEF -> AllIcons.Nodes.Related
+    PermifyTypes.PERMISSION_DEF -> AllIcons.Nodes.Padlock
+    PermifyTypes.ACTION_DEF -> AllIcons.Nodes.Method
+    PermifyTypes.ATTRIBUTE_DEF -> AllIcons.Nodes.Property
+    PermifyTypes.RULE_DEF -> AllIcons.Nodes.Function
+    PermifyTypes.RULE_PARAM, PermifyTypes.PRIMARY_EXPR -> AllIcons.Nodes.Parameter
+    else -> AllIcons.Nodes.Unknown
+  }
 
   fun findEntityByName(file: PermifyFile, name: String): PsiElement? = file.node.getChildren(null)
     .filter { it.elementType == PermifyTypes.ENTITY_DEF }

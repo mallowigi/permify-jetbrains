@@ -1,5 +1,6 @@
 package com.mallowigi.permify.reference
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
@@ -9,6 +10,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import com.mallowigi.permify.file.PermifyFile
 import com.mallowigi.permify.lang.psi.*
+import com.mallowigi.permify.lang.psi.PermifyPsiUtil.iconFor
 
 class PermifyReferenceContributor : PsiReferenceContributor() {
   override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -72,9 +74,12 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findEntityByName(file, element.text)
     }
 
-    override fun getVariants(): Array<PsiElement> {
+    override fun getVariants(): Array<LookupElementBuilder> {
       val file = element.containingFile as PermifyFile
-      return PermifyPsiUtil.findAllEntities(file).filterNotNull().toTypedArray()
+      return PermifyPsiUtil.findAllEntities(file)
+        .filterNotNull()
+        .map { createLookupElement(it) }
+        .toTypedArray()
     }
   }
 
@@ -89,12 +94,15 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findRelationByName(containingEntity.parent as PermifyEntityDef, element.text)
     }
 
-    override fun getVariants(): Array<PsiElement> {
+    override fun getVariants(): Array<LookupElementBuilder> {
       val entityName = element.prevSibling.prevSibling.text
       val containingEntity =
         PermifyPsiUtil.findEntityByName(element.containingFile as PermifyFile, entityName) ?: return emptyArray()
 
-      return PermifyPsiUtil.findAllRelations(containingEntity.parent as PermifyEntityDef).filterNotNull().toTypedArray()
+      return PermifyPsiUtil.findAllRelations(containingEntity.parent as PermifyEntityDef)
+        .filterNotNull()
+        .map { createLookupElement(it) }
+        .toTypedArray()
     }
   }
 
@@ -106,10 +114,13 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findRuleByName(file, enclosingEntityDef, element.text)
     }
 
-    override fun getVariants(): Array<PsiElement> {
+    override fun getVariants(): Array<LookupElementBuilder> {
       val enclosingEntityDef = element.parentOfType<PermifyEntityDef>()
       val file = element.containingFile as PermifyFile
-      return PermifyPsiUtil.findAllRules(file, enclosingEntityDef).filterNotNull().toTypedArray()
+      return PermifyPsiUtil.findAllRules(file, enclosingEntityDef)
+        .filterNotNull()
+        .map { createLookupElement(it) }
+        .toTypedArray()
     }
   }
 
@@ -120,9 +131,12 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
     }
 
-    override fun getVariants(): Array<PsiElement> {
+    override fun getVariants(): Array<LookupElementBuilder> {
       val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return emptyArray()
-      return PermifyPsiUtil.findAllDeclarations(containingEntity).filterNotNull().toTypedArray()
+      return PermifyPsiUtil.findAllDeclarations(containingEntity)
+        .filterNotNull()
+        .map { createLookupElement(it) }
+        .toTypedArray()
     }
   }
 
@@ -133,9 +147,17 @@ class PermifyReferenceContributor : PsiReferenceContributor() {
       return PermifyPsiUtil.findDeclarationByName(containingEntity, element.text)
     }
 
-    override fun getVariants(): Array<PsiElement> {
+    override fun getVariants(): Array<LookupElementBuilder> {
       val containingEntity = element.parentOfType<PermifyEntityDef>() ?: return emptyArray()
-      return PermifyPsiUtil.findAllDeclarations(containingEntity).filterNotNull().toTypedArray()
+      return PermifyPsiUtil.findAllDeclarations(containingEntity)
+        .filterNotNull()
+        .map { createLookupElement(it) }
+        .toTypedArray()
     }
   }
 }
+
+private fun createLookupElement(el: PsiElement): LookupElementBuilder =
+  LookupElementBuilder
+    .create(el.text)
+    .withIcon(iconFor(el.parent.elementType))

@@ -39,6 +39,13 @@ class PermifyReferenceContributorTest : ParsingTestCase("", "perm", PermifyParse
     // Without this, IDENTIFIER leaves are plain LeafPsiElements and never consult
     // ReferenceProvidersRegistry - see PermifyIdentifierElement/PermifyASTFactory.
     addExplicitExtension(LanguageASTFactory.INSTANCE, PermifyLanguage, PermifyASTFactory())
+    // LanguageASTFactory.INSTANCE is a JVM-wide singleton that caches its result onto the
+    // (also singleton) PermifyLanguage object. If an earlier test class in the same JVM run
+    // (e.g. PermifyParsingTest) triggered a lookup before this registration, the stale
+    // "no factory" result sticks around - addExplicitExtension's cache invalidation relies on
+    // an extension-point listener that only ever attaches once per JVM, so it won't fire for
+    // this test's fresh area. Force a clear so the lookup is recomputed against our registration.
+    LanguageASTFactory.INSTANCE.clearCache(PermifyLanguage)
   }
 
   fun testSubjectRefEntityReference() {
